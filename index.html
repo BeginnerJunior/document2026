@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Fundamental Concepts</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0f172a;
+            color: #e2e8f0;
+            line-height: 1.7;
+            padding: 2rem;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, #38bdf8, #818cf8, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #94a3b8;
+            margin-bottom: 2.5rem;
+            font-size: 1.1rem;
+        }
+
+        /* Navigation */
+        nav {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 1.5rem 2rem;
+            margin-bottom: 2.5rem;
+            border: 1px solid #334155;
+        }
+
+        nav h2 {
+            color: #38bdf8;
+            font-size: 1.1rem;
+            margin-bottom: 0.8rem;
+        }
+
+        nav ol {
+            columns: 2;
+            column-gap: 2rem;
+            padding-left: 1.2rem;
+        }
+
+        nav li {
+            margin-bottom: 0.4rem;
+        }
+
+        nav a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        nav a:hover { color: #38bdf8; }
+
+        /* Sections */
+        .section {
+            background: #1e293b;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 1px solid #334155;
+            transition: border-color 0.3s;
+        }
+
+        .section:hover { border-color: #475569; }
+
+        h2 {
+            font-size: 1.6rem;
+            color: #38bdf8;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #334155;
+        }
+
+        h3 {
+            font-size: 1.2rem;
+            color: #818cf8;
+            margin: 1.5rem 0 0.8rem 0;
+        }
+
+        h4 {
+            font-size: 1.05rem;
+            color: #c084fc;
+            margin: 1.2rem 0 0.6rem 0;
+        }
+
+        p { margin-bottom: 0.8rem; }
+
+        strong { color: #f1f5f9; }
+
+        ul, ol {
+            padding-left: 1.5rem;
+            margin-bottom: 1rem;
+        }
+
+        li { margin-bottom: 0.4rem; }
+
+        code {
+            background: #0f172a;
+            color: #38bdf8;
+            padding: 0.15rem 0.5rem;
+            border-radius: 4px;
+            font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            padding: 1.2rem;
+            overflow-x: auto;
+            margin: 1rem 0;
+            font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
+            font-size: 0.85rem;
+            line-height: 1.6;
+            color: #cbd5e1;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.95rem;
+        }
+
+        th {
+            background: #0f172a;
+            color: #38bdf8;
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            border-bottom: 2px solid #334155;
+        }
+
+        td {
+            padding: 0.65rem 1rem;
+            border-bottom: 1px solid #1e293b;
+        }
+
+        tr:nth-child(even) td { background: rgba(15, 23, 42, 0.4); }
+        tr:hover td { background: rgba(56, 189, 248, 0.05); }
+
+        /* Blockquote */
+        blockquote {
+            border-left: 4px solid #818cf8;
+            background: rgba(129, 140, 248, 0.08);
+            padding: 1rem 1.5rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1rem 0;
+            font-style: italic;
+        }
+
+        /* Badges / Tags */
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.7rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-right: 0.3rem;
+        }
+
+        .badge-blue { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
+        .badge-purple { background: rgba(192, 132, 252, 0.15); color: #c084fc; }
+        .badge-green { background: rgba(74, 222, 128, 0.15); color: #4ade80; }
+
+        /* Highlight box */
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(129, 140, 248, 0.1));
+            border: 1px solid #334155;
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+        }
+
+        .tip {
+            background: rgba(74, 222, 128, 0.08);
+            border-left: 4px solid #4ade80;
+            padding: 1rem 1.5rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1rem 0;
+        }
+
+        .tip::before {
+            content: "Tip: ";
+            color: #4ade80;
+            font-weight: 700;
+        }
+
+        .warning {
+            background: rgba(251, 191, 36, 0.08);
+            border-left: 4px solid #fbbf24;
+            padding: 1rem 1.5rem;
+            border-radius: 0 8px 8px 0;
+            margin: 1rem 0;
+        }
+
+        .warning::before {
+            content: "Warning: ";
+            color: #fbbf24;
+            font-weight: 700;
+        }
+
+        /* Diagram boxes */
+        .diagram {
+            text-align: center;
+            padding: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .flow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .flow-item {
+            background: #0f172a;
+            border: 1px solid #334155;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            font-size: 0.9rem;
+        }
+
+        .flow-arrow {
+            color: #38bdf8;
+            font-size: 1.2rem;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            color: #475569;
+            padding: 2rem 0 1rem;
+            font-size: 0.85rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            h1 { font-size: 1.8rem; }
+            nav ol { columns: 1; }
+            .section { padding: 1.5rem; }
+            pre { font-size: 0.75rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <h1>AI Fundamental Concepts</h1>
+    <p class="subtitle">A complete guide to understanding modern AI &mdash; 2026 Edition</p>
+
+    <!-- Table of Contents -->
+    <nav>
+        <h2>Table of Contents</h2>
+        <ol>
+            <li><a href="#tokens">Tokens</a></li>
+            <li><a href="#context-window">Context Window</a></li>
+            <li><a href="#temperature">Temperature</a></li>
+            <li><a href="#top-p">Top-p (Nucleus Sampling)</a></li>
+            <li><a href="#prompting">Prompting Techniques</a></li>
+            <li><a href="#parameters">Other Key Parameters</a></li>
+            <li><a href="#cheatsheet">Summary Cheat Sheet</a></li>
+            <li><a href="#multimodal">How AI Understands Images &amp; Video</a></li>
+            <li><a href="#efficiency">How to Use AI Efficiently</a></li>
+            <li><a href="#quiz">Practice Quiz (30 Questions)</a></li>
+        </ol>
+    </nav>
+
+    <!-- ==================== SECTION 1: TOKENS ==================== -->
+    <div class="section" id="tokens">
+        <h2>1. Tokens</h2>
+        <p>The <strong>smallest unit</strong> an LLM processes. Text is split into tokens before processing.</p>
+        <ul>
+            <li>A token is roughly <strong>&frac34; of a word</strong> in English (e.g., "unhappiness" &rarr; <code>un</code>, <code>happiness</code>)</li>
+            <li>Models have a <strong>token limit</strong> that governs how much they can read and generate.</li>
+            <li>Cost/pricing is typically measured <strong>per token</strong> (input and output separately).</li>
+        </ul>
+        <div class="tip">Think of tokens like puzzle pieces &mdash; the model reads and generates one piece at a time.</div>
+    </div>
+
+    <!-- ==================== SECTION 2: CONTEXT WINDOW ==================== -->
+    <div class="section" id="context-window">
+        <h2>2. Context Window</h2>
+        <p>The <strong>maximum number of tokens</strong> a model can handle in a single conversation (input + output combined).</p>
+        <table>
+            <tr><th>Model</th><th>Context Window</th></tr>
+            <tr><td>GPT-4o</td><td>~128K tokens</td></tr>
+            <tr><td>Claude Opus 4.6</td><td>~1M tokens</td></tr>
+            <tr><td>Gemini 1.5 Pro</td><td>~2M tokens</td></tr>
+        </table>
+        <ul>
+            <li>Larger context = can process more information at once (entire codebases, long documents).</li>
+            <li><strong>Limitation:</strong> performance can degrade on information in the "middle" of very long contexts ("lost in the middle" problem).</li>
+        </ul>
+    </div>
+
+    <!-- ==================== SECTION 3: TEMPERATURE ==================== -->
+    <div class="section" id="temperature">
+        <h2>3. Temperature</h2>
+        <p>Controls <strong>randomness/creativity</strong> of the model's output.</p>
+        <table>
+            <tr><th>Value</th><th>Behavior</th><th>Use Case</th></tr>
+            <tr><td><code>0.0</code></td><td>Deterministic, most probable answer</td><td>Code, math, factual Q&amp;A</td></tr>
+            <tr><td><code>0.3 &ndash; 0.7</code></td><td>Balanced creativity</td><td>General conversation, writing</td></tr>
+            <tr><td><code>1.0+</code></td><td>Highly random, creative</td><td>Brainstorming, storytelling</td></tr>
+        </table>
+        <ul>
+            <li>Technically: temperature scales the probability distribution over the next token.</li>
+            <li><code>temperature=0</code> &rarr; always picks the highest-probability token.</li>
+        </ul>
+    </div>
+
+    <!-- ==================== SECTION 4: TOP-P ==================== -->
+    <div class="section" id="top-p">
+        <h2>4. Top-p (Nucleus Sampling)</h2>
+        <ul>
+            <li>An alternative to temperature for controlling randomness.</li>
+            <li><code>top_p=0.9</code> means: only consider tokens whose cumulative probability adds up to 90%.</li>
+            <li>Lower top-p = more focused; higher top-p = more diverse.</li>
+            <li>Often used <strong>together</strong> with temperature.</li>
+        </ul>
+
+        <div class="highlight-box">
+            <h4>Quick Comparison</h4>
+<pre>Precision &laquo;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&raquo; Creativity
+
+temp=0          temp=0.5          temp=1.0
+top_p=0.1       top_p=0.5         top_p=0.95</pre>
+        </div>
+    </div>
+
+    <!-- ==================== SECTION 5: PROMPTING ==================== -->
+    <div class="section" id="prompting">
+        <h2>5. Prompting Techniques</h2>
+
+        <h3>Zero-Shot</h3>
+        <p>Ask the model to do something <strong>with no examples</strong>. It relies entirely on pre-trained knowledge.</p>
+<pre>Classify this review as positive or negative:
+"The food was terrible." &rarr; ?</pre>
+
+        <h3>One-Shot</h3>
+        <p>Provide <strong>one example</strong> before the actual task.</p>
+<pre>Classify:
+"Great service!" &rarr; Positive
+
+"The food was terrible." &rarr; ?</pre>
+
+        <h3>Few-Shot</h3>
+        <p>Provide <strong>a few examples</strong> (typically 2&ndash;5) to guide the model.</p>
+<pre>Classify:
+"Great service!"    &rarr; Positive
+"Awful experience." &rarr; Negative
+"It was okay."      &rarr; Neutral
+
+"The food was terrible." &rarr; ?</pre>
+        <div class="tip">More examples = better pattern recognition, but uses more tokens.</div>
+
+        <h3>Chain-of-Thought (CoT)</h3>
+        <p>Instruct the model to <strong>reason step-by-step</strong> before giving the final answer.</p>
+<pre>Q: If a store has 23 apples and sells 17, how many are left?
+
+A: Let's think step by step.
+   - Start with 23 apples
+   - Sold 17 apples
+   - 23 - 17 = 6
+   Answer: 6</pre>
+        <ul>
+            <li>Dramatically improves performance on <strong>math, logic, and multi-step reasoning</strong>.</li>
+            <li>Triggered by adding <strong>"Let's think step by step"</strong> to the prompt.</li>
+        </ul>
+
+        <div class="highlight-box">
+            <h4>When to Use Which?</h4>
+<pre>Simple task?            &rarr; Zero-shot     (just ask)
+Need consistent format? &rarr; Few-shot      (give examples)
+Complex reasoning?      &rarr; Chain-of-Thought (think step by step)
+Very complex task?      &rarr; Break it into subtasks</pre>
+        </div>
+    </div>
+
+    <!-- ==================== SECTION 6: PARAMETERS ==================== -->
+    <div class="section" id="parameters">
+        <h2>6. Other Key Parameters</h2>
+        <table>
+            <tr><th>Parameter</th><th>What it does</th></tr>
+            <tr><td><code>max_tokens</code></td><td>Maximum number of tokens the model will generate</td></tr>
+            <tr><td><code>stop_sequences</code></td><td>Tokens/strings that tell the model to stop generating</td></tr>
+            <tr><td><code>frequency_penalty</code></td><td>Reduces repetition of tokens already used</td></tr>
+            <tr><td><code>presence_penalty</code></td><td>Encourages the model to talk about new topics</td></tr>
+            <tr><td><code>system prompt</code></td><td>Hidden instructions that set the model's behavior/persona</td></tr>
+        </table>
+    </div>
+
+    <!-- ==================== SECTION 7: CHEAT SHEET ==================== -->
+    <div class="section" id="cheatsheet">
+        <h2>7. Summary Cheat Sheet</h2>
+        <table>
+            <tr><th>Concept</th><th>One-liner</th></tr>
+            <tr><td><strong>Token</strong></td><td>Smallest text unit the model reads</td></tr>
+            <tr><td><strong>Context Window</strong></td><td>Max tokens per conversation</td></tr>
+            <tr><td><strong>Temperature</strong></td><td>Controls randomness (0 = precise, 1 = creative)</td></tr>
+            <tr><td><strong>Top-p</strong></td><td>Alternative randomness control by probability cutoff</td></tr>
+            <tr><td><strong>Zero-shot</strong></td><td>No examples, just ask</td></tr>
+            <tr><td><strong>Few-shot</strong></td><td>Give examples first, then ask</td></tr>
+            <tr><td><strong>Chain-of-Thought</strong></td><td>Make the model reason step by step</td></tr>
+        </table>
+    </div>
+
+    <!-- ==================== SECTION 8: MULTIMODAL ==================== -->
+    <div class="section" id="multimodal">
+        <h2>8. How AI Understands Images &amp; Video</h2>
+
+        <h3>The Core Idea: Multimodal Models</h3>
+        <p>Traditional LLMs only understand <strong>text</strong>. Multimodal models can process <strong>text + images + audio + video</strong> by converting everything into the same representation.</p>
+
+        <h3>Step 1: Vision Encoder</h3>
+        <p>Images are split into small patches (like a grid), then each patch is converted into a <strong>numerical vector (embedding)</strong>.</p>
+<pre>+---+---+---+---+
+|   |   |   |   |
++---+---+---+---+   &rarr;  [0.23, 0.87, 0.12, ...]  (patch embeddings)
+|   |   |   |   |   &rarr;  [0.45, 0.31, 0.98, ...]
++---+---+---+---+   &rarr;  [0.67, 0.54, 0.22, ...]
+|   |   |   |   |   &rarr;  ...
++---+---+---+---+
+
+Image patches  &rarr;  Vectors (same format as text tokens)</pre>
+        <p>Common vision encoders: <span class="badge badge-blue">ViT</span> <span class="badge badge-purple">CLIP</span> <span class="badge badge-green">SigLIP</span></p>
+
+        <h3>Step 2: Projection Layer</h3>
+        <p>Image embeddings are <strong>mapped into the same space</strong> as text token embeddings, so the LLM can "read" them.</p>
+<pre>Image patches &rarr; Vision Encoder &rarr; Projection &rarr; [image tokens]
+                                                         |
+Text input    &rarr; Tokenizer      &rarr;             [text tokens]
+                                                         |
+                                                  Combined sequence
+                                                         |
+                                                    LLM (Transformer)
+                                                         |
+                                                    Text output</pre>
+
+        <h3>Step 3: The LLM Processes Both Together</h3>
+        <p>The model sees a <strong>single sequence</strong> of tokens &mdash; some from text, some from images. It uses the same attention mechanism on all of them.</p>
+        <ul>
+            <li>Relate text to specific parts of the image</li>
+            <li>Answer questions about what it "sees"</li>
+            <li>Describe, analyze, or reason about visual content</li>
+        </ul>
+
+        <h3>How Video Works</h3>
+        <p>Video is essentially <strong>a sequence of images (frames)</strong>.</p>
+        <div class="flow">
+            <span class="flow-item">Video</span>
+            <span class="flow-arrow">&rarr;</span>
+            <span class="flow-item">Sample Key Frames</span>
+            <span class="flow-arrow">&rarr;</span>
+            <span class="flow-item">Encode Each Frame</span>
+            <span class="flow-arrow">&rarr;</span>
+            <span class="flow-item">Feed All Frame Tokens to LLM</span>
+        </div>
+        <ul>
+            <li>Models <strong>sample frames</strong> at intervals (e.g., 1 per second) &mdash; not every frame is used.</li>
+            <li>Some models process <strong>audio tracks</strong> separately and combine them.</li>
+            <li>Video uses <strong>many more tokens</strong> than a single image.</li>
+        </ul>
+
+        <h3>Key Technologies</h3>
+        <table>
+            <tr><th>Technology</th><th>Role</th></tr>
+            <tr><td><strong>CLIP</strong> (OpenAI)</td><td>Matches images with text descriptions &mdash; foundation for image understanding</td></tr>
+            <tr><td><strong>ViT</strong></td><td>Applies Transformer architecture to image patches</td></tr>
+            <tr><td><strong>Contrastive Learning</strong></td><td>Trains model to link "photo of a cat" with a cat image</td></tr>
+            <tr><td><strong>Cross-Attention</strong></td><td>Lets text tokens "look at" image tokens and vice versa</td></tr>
+        </table>
+
+        <h3>Training Process</h3>
+        <ol>
+            <li><strong>Pre-training:</strong> Show millions of (image, text) pairs &mdash; model learns to connect visuals with words</li>
+            <li><strong>Instruction tuning:</strong> Train on Q&amp;A about images ("What color is the car?" &rarr; "Red")</li>
+            <li><strong>RLHF:</strong> Human feedback to improve accuracy and safety</li>
+        </ol>
+
+        <blockquote>
+            <strong>Images, text, audio, and video can all be represented as sequences of numerical vectors.</strong> Once everything is in the same format, a Transformer can process them all together.
+        </blockquote>
+
+        <h3>Multimodal Summary</h3>
+        <table>
+            <tr><th>Question</th><th>Answer</th></tr>
+            <tr><td>How does AI "see"?</td><td>Splits images into patches, converts to numerical vectors</td></tr>
+            <tr><td>How does it connect image to text?</td><td>Both are mapped to the same vector space</td></tr>
+            <tr><td>How does video work?</td><td>Sample frames &rarr; encode each &rarr; process as a long sequence</td></tr>
+            <tr><td>Why is this possible?</td><td>Transformers can attend to any type of token in a sequence</td></tr>
+        </table>
+    </div>
+
+    <!-- ==================== SECTION 9: EFFICIENCY ==================== -->
+    <div class="section" id="efficiency">
+        <h2>9. How to Use AI Efficiently</h2>
+
+        <h3>Write Clear Prompts</h3>
+        <p>The <strong>#1 factor</strong> in getting good results. Be specific about what you want.</p>
+        <table>
+            <tr><th>Bad Prompt</th><th>Good Prompt</th></tr>
+            <tr><td>"Fix my code"</td><td>"Fix the null pointer error in the login function at line 42"</td></tr>
+            <tr><td>"Write about dogs"</td><td>"Write a 200-word paragraph about golden retrievers as family pets"</td></tr>
+            <tr><td>"Help me with SQL"</td><td>"Write a SQL query to find the top 10 customers by total order amount in 2025"</td></tr>
+        </table>
+
+        <h4>The CRAFT Framework</h4>
+        <table>
+            <tr><th>Letter</th><th>Meaning</th><th>Example</th></tr>
+            <tr><td><strong>C</strong></td><td>Context</td><td>"I'm a backend developer working on a REST API..."</td></tr>
+            <tr><td><strong>R</strong></td><td>Role</td><td>"Act as a senior code reviewer..."</td></tr>
+            <tr><td><strong>A</strong></td><td>Action</td><td>"Review this function and suggest improvements..."</td></tr>
+            <tr><td><strong>F</strong></td><td>Format</td><td>"Return the result as a numbered list..."</td></tr>
+            <tr><td><strong>T</strong></td><td>Tone</td><td>"Explain in simple terms for a junior developer..."</td></tr>
+        </table>
+
+        <h3>Choose the Right Temperature</h3>
+        <table>
+            <tr><th>Task</th><th>Temperature</th><th>Why</th></tr>
+            <tr><td>Code generation</td><td>0 &ndash; 0.2</td><td>Need accuracy, not creativity</td></tr>
+            <tr><td>Data analysis</td><td>0 &ndash; 0.3</td><td>Factual, precise answers</td></tr>
+            <tr><td>General writing</td><td>0.5 &ndash; 0.7</td><td>Balance of quality and variety</td></tr>
+            <tr><td>Brainstorming</td><td>0.8 &ndash; 1.0</td><td>Want diverse, creative ideas</td></tr>
+        </table>
+
+        <h3>Break Complex Tasks into Steps</h3>
+        <p>Don't ask AI to do everything at once. <strong>Decompose</strong> large tasks.</p>
+        <div class="warning">Instead of "Build me a complete e-commerce website", break it down:</div>
+        <ol>
+            <li>"Design the database schema for products, users, and orders"</li>
+            <li>"Create the API endpoints for product CRUD operations"</li>
+            <li>"Build the shopping cart logic"</li>
+            <li>"Create the checkout flow"</li>
+        </ol>
+
+        <h3>Iterate, Don't Start Over</h3>
+        <p>If the output isn't perfect, <strong>refine</strong> rather than rewrite.</p>
+<pre>You:  "Write a function to validate emails"
+AI:   [gives basic regex]
+You:  "Also handle edge cases like '+' aliases and subdomains"
+AI:   [improved version]
+You:  "Add unit tests for these cases"
+AI:   [complete solution with tests]</pre>
+
+        <h3>Use System Prompts / Custom Instructions</h3>
+        <p>Set <strong>persistent context</strong> so you don't repeat yourself.</p>
+<pre>System: You are a Python expert. Always use type hints.
+        Follow PEP 8. Prefer list comprehensions over loops.
+        Use pytest for testing.</pre>
+
+        <h3>Manage Token Usage (Save Cost &amp; Speed)</h3>
+        <table>
+            <tr><th>Strategy</th><th>How</th></tr>
+            <tr><td>Be concise</td><td>Remove unnecessary words from prompts</td></tr>
+            <tr><td>Limit output</td><td>"Answer in 3 bullet points" or set max_tokens</td></tr>
+            <tr><td>Use smaller models for simple tasks</td><td>Haiku for classification, Opus for complex reasoning</td></tr>
+            <tr><td>Cache repeated context</td><td>Use prompt caching for repeated system prompts</td></tr>
+            <tr><td>Summarize long inputs</td><td>Compress documents before asking questions</td></tr>
+        </table>
+
+        <h4>Model Selection Guide</h4>
+        <div class="highlight-box">
+<pre>Simple tasks (classify, extract, format)   &rarr; Haiku   (fast, cheap)
+General tasks (write, explain, code)       &rarr; Sonnet  (balanced)
+Complex tasks (architect, research, plan)  &rarr; Opus    (most capable)</pre>
+        </div>
+
+        <h3>Validate AI Output</h3>
+        <p>AI can be <strong>confidently wrong</strong> (hallucination). Always verify:</p>
+        <ul>
+            <li><strong>Code:</strong> Run it. Write tests. Don't just trust it compiles.</li>
+            <li><strong>Facts:</strong> Cross-check important claims with reliable sources.</li>
+            <li><strong>Numbers:</strong> Recalculate critical math independently.</li>
+            <li><strong>Links/URLs:</strong> AI often generates fake URLs. Check them.</li>
+        </ul>
+
+        <h3>Common Mistakes to Avoid</h3>
+        <table>
+            <tr><th>Mistake</th><th>Fix</th></tr>
+            <tr><td>Vague prompts</td><td>Be specific about input, output, and format</td></tr>
+            <tr><td>Too much in one prompt</td><td>Break into smaller tasks</td></tr>
+            <tr><td>Blindly trusting output</td><td>Always review and test</td></tr>
+            <tr><td>Starting over on bad output</td><td>Iterate and refine instead</td></tr>
+            <tr><td>Using the biggest model for everything</td><td>Match model to task complexity</td></tr>
+            <tr><td>Not providing context</td><td>Include relevant background info</td></tr>
+            <tr><td>Ignoring system prompts</td><td>Use them to set consistent behavior</td></tr>
+        </table>
+
+        <h3>Efficiency Formula</h3>
+        <div class="highlight-box" style="text-align:center; font-size:1.05rem;">
+            <strong>Clear Prompt</strong> + <strong>Right Model</strong> + <strong>Right Technique</strong> + <strong>Right Temperature</strong> + <strong>Iteration</strong> + <strong>Validation</strong><br>
+            = <span style="color:#4ade80; font-size:1.2rem; font-weight:700;">Best Results at Lowest Cost</span>
+        </div>
+    </div>
+
+    <!-- ==================== SECTION 10: QUIZ ==================== -->
+    <div class="section" id="quiz">
+        <h2>10. Practice Quiz</h2>
+        <p>Test your understanding! Click an answer to check. Your score is tracked at the bottom.</p>
+
+        <div id="score-bar" style="
+            position: sticky; top: 0; z-index: 10;
+            background: #0f172a; border: 1px solid #334155; border-radius: 8px;
+            padding: 0.8rem 1.5rem; margin-bottom: 1.5rem;
+            display: flex; justify-content: space-between; align-items: center;
+        ">
+            <span>Score: <strong id="score-correct" style="color:#4ade80;">0</strong> / <strong id="score-total">30</strong></span>
+            <span id="score-pct" style="color:#94a3b8;">0%</span>
+            <button onclick="resetQuiz()" style="
+                background:#334155; color:#e2e8f0; border:none; padding:0.4rem 1rem;
+                border-radius:6px; cursor:pointer; font-size:0.85rem;
+            ">Reset All</button>
+        </div>
+
+        <div id="quiz-container"></div>
+    </div>
+
+    <div style="text-align:center; margin: 2rem 0;">
+        <a href="AI_Video_Summary.html" style="
+            display: inline-block;
+            background: linear-gradient(135deg, #f472b6, #818cf8, #38bdf8);
+            color: #0f172a;
+            text-decoration: none;
+            padding: 0.8rem 2rem;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 1.05rem;
+            transition: opacity 0.2s;
+        " onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
+            Video Lesson Summaries &rarr;
+        </a>
+    </div>
+
+    <footer>
+        AI Fundamental Concepts &mdash; 2026 Edition &mdash; Generated with Claude
+    </footer>
+
+</div>
+
+<script>
+const questions = [
+    // === TOKENS & CONTEXT ===
+    {
+        category: "Tokens & Context",
+        q: "What is a token in the context of LLMs?",
+        options: [
+            "A security key for API access",
+            "The smallest unit of text an LLM processes",
+            "A type of neural network layer",
+            "A measurement of model accuracy"
+        ],
+        answer: 1,
+        explanation: "Tokens are the smallest units of text that LLMs read and generate. A token is roughly 3/4 of a word in English."
+    },
+    {
+        category: "Tokens & Context",
+        q: "Roughly how many tokens make up one English word?",
+        options: [
+            "Exactly 1 token = 1 word",
+            "1 word ≈ 1.3 tokens (4/3)",
+            "1 word ≈ 3 tokens",
+            "1 word ≈ 10 tokens"
+        ],
+        answer: 1,
+        explanation: "On average, 1 English word ≈ 1.3 tokens (or equivalently, 1 token ≈ 3/4 of a word)."
+    },
+    {
+        category: "Tokens & Context",
+        q: "What is a context window?",
+        options: [
+            "The screen where you type prompts",
+            "The maximum number of tokens a model can process in one conversation",
+            "The training dataset size",
+            "The number of GPUs used for inference"
+        ],
+        answer: 1,
+        explanation: "The context window is the maximum number of tokens (input + output) a model can handle in a single conversation."
+    },
+    {
+        category: "Tokens & Context",
+        q: "What happens when your input exceeds the context window?",
+        options: [
+            "The model automatically summarizes older content",
+            "The model processes it in chunks automatically",
+            "The request will fail or earlier content gets truncated",
+            "The model runs slower but still processes everything"
+        ],
+        answer: 2,
+        explanation: "When input exceeds the context window, it typically gets truncated (earlier content is lost) or the API returns an error."
+    },
+    {
+        category: "Tokens & Context",
+        q: "What is the 'lost in the middle' problem?",
+        options: [
+            "Models forget their system prompt",
+            "Models perform worse on information placed in the middle of long contexts",
+            "Tokens get corrupted during transfer",
+            "Models can't process even-numbered tokens"
+        ],
+        answer: 1,
+        explanation: "Research shows models pay more attention to the beginning and end of long contexts, sometimes missing details in the middle."
+    },
+
+    // === TEMPERATURE & TOP-P ===
+    {
+        category: "Temperature & Sampling",
+        q: "What does temperature=0 mean?",
+        options: [
+            "The model is turned off",
+            "The model gives the most random output possible",
+            "The model always picks the highest-probability token (deterministic)",
+            "The model only outputs numbers"
+        ],
+        answer: 2,
+        explanation: "Temperature=0 makes the model deterministic — it always selects the most probable next token, giving consistent and predictable output."
+    },
+    {
+        category: "Temperature & Sampling",
+        q: "Which temperature is best for writing creative fiction?",
+        options: [
+            "0.0",
+            "0.1",
+            "0.8 – 1.0",
+            "5.0"
+        ],
+        answer: 2,
+        explanation: "Higher temperatures (0.8–1.0) produce more creative and diverse outputs, ideal for brainstorming and storytelling."
+    },
+    {
+        category: "Temperature & Sampling",
+        q: "What does top_p=0.9 mean?",
+        options: [
+            "Use 90% of the model's parameters",
+            "Only consider tokens whose cumulative probability adds up to 90%",
+            "The model is 90% confident",
+            "Output 90% of the maximum tokens"
+        ],
+        answer: 1,
+        explanation: "Top-p (nucleus sampling) with p=0.9 means the model only considers the smallest set of tokens whose probabilities sum to 90%, filtering out unlikely tokens."
+    },
+    {
+        category: "Temperature & Sampling",
+        q: "For generating accurate code, which temperature should you use?",
+        options: [
+            "1.0 for maximum creativity",
+            "0 – 0.2 for accuracy",
+            "0.5 for balance",
+            "Temperature doesn't affect code"
+        ],
+        answer: 1,
+        explanation: "Low temperature (0–0.2) ensures the model picks the most likely correct tokens, which is crucial for code generation."
+    },
+    {
+        category: "Temperature & Sampling",
+        q: "What does frequency_penalty do?",
+        options: [
+            "Limits how often you can call the API",
+            "Reduces the repetition of tokens already used in the output",
+            "Controls how fast the model generates",
+            "Penalizes long prompts"
+        ],
+        answer: 1,
+        explanation: "Frequency penalty reduces the likelihood of the model repeating tokens it has already generated, making output more varied."
+    },
+
+    // === PROMPTING TECHNIQUES ===
+    {
+        category: "Prompting Techniques",
+        q: "What is zero-shot prompting?",
+        options: [
+            "Asking the model with no examples provided",
+            "Giving the model zero seconds to respond",
+            "A prompt that always fails",
+            "Using the model without any training"
+        ],
+        answer: 0,
+        explanation: "Zero-shot means asking the model to perform a task without providing any examples — it relies purely on its pre-trained knowledge."
+    },
+    {
+        category: "Prompting Techniques",
+        q: "How many examples are typically used in few-shot prompting?",
+        options: [
+            "0",
+            "1",
+            "2 – 5",
+            "100+"
+        ],
+        answer: 2,
+        explanation: "Few-shot typically uses 2–5 examples to demonstrate the desired pattern before the actual task."
+    },
+    {
+        category: "Prompting Techniques",
+        q: "What phrase commonly triggers Chain-of-Thought reasoning?",
+        options: [
+            "\"Answer immediately\"",
+            "\"Be creative\"",
+            "\"Let's think step by step\"",
+            "\"Give me the shortest answer\""
+        ],
+        answer: 2,
+        explanation: "Adding 'Let's think step by step' encourages the model to break down its reasoning process before giving a final answer."
+    },
+    {
+        category: "Prompting Techniques",
+        q: "When should you use Chain-of-Thought instead of zero-shot?",
+        options: [
+            "For simple classification tasks",
+            "For math, logic, and multi-step reasoning problems",
+            "When you want shorter responses",
+            "When you want to save tokens"
+        ],
+        answer: 1,
+        explanation: "Chain-of-Thought dramatically improves performance on complex reasoning tasks like math, logic puzzles, and multi-step problems."
+    },
+    {
+        category: "Prompting Techniques",
+        q: "What is the downside of using more few-shot examples?",
+        options: [
+            "It makes the model dumber",
+            "It uses more tokens (higher cost and fills context window)",
+            "It breaks the model",
+            "It has no downside"
+        ],
+        answer: 1,
+        explanation: "Each example takes up tokens in the context window. More examples = more tokens consumed = higher cost and less room for the actual task."
+    },
+
+    // === PARAMETERS ===
+    {
+        category: "Key Parameters",
+        q: "What does max_tokens control?",
+        options: [
+            "The maximum input length",
+            "The maximum number of tokens the model will generate in its response",
+            "The model's memory size",
+            "The number of API calls allowed"
+        ],
+        answer: 1,
+        explanation: "max_tokens sets the upper limit on how many tokens the model will generate in its response."
+    },
+    {
+        category: "Key Parameters",
+        q: "What is a system prompt?",
+        options: [
+            "The first user message",
+            "Hidden instructions that set the model's behavior and persona",
+            "An error message from the system",
+            "The model's source code"
+        ],
+        answer: 1,
+        explanation: "A system prompt is a set of hidden instructions given to the model that defines its behavior, role, and constraints for the conversation."
+    },
+    {
+        category: "Key Parameters",
+        q: "What do stop_sequences do?",
+        options: [
+            "Stop the model from starting",
+            "Define tokens/strings that tell the model to stop generating",
+            "Prevent the model from using certain words",
+            "Pause the model for a set time"
+        ],
+        answer: 1,
+        explanation: "Stop sequences are specific tokens or strings that, when generated, signal the model to stop producing further output."
+    },
+
+    // === MULTIMODAL ===
+    {
+        category: "Multimodal AI",
+        q: "How does a multimodal AI 'see' an image?",
+        options: [
+            "It reads the filename",
+            "It splits the image into patches and converts each to a numerical vector",
+            "It converts the image to text using OCR only",
+            "It can't actually see images"
+        ],
+        answer: 1,
+        explanation: "A vision encoder splits images into small patches, then converts each patch into a numerical vector (embedding) that the model can process."
+    },
+    {
+        category: "Multimodal AI",
+        q: "What does the projection layer do in multimodal models?",
+        options: [
+            "Displays the image on screen",
+            "Maps image embeddings into the same vector space as text embeddings",
+            "Compresses the image to save storage",
+            "Translates text to another language"
+        ],
+        answer: 1,
+        explanation: "The projection layer maps image embeddings into the same space as text token embeddings, allowing the LLM to process both together."
+    },
+    {
+        category: "Multimodal AI",
+        q: "How does AI process video?",
+        options: [
+            "It watches the video in real-time",
+            "It samples key frames, encodes each, and feeds frame tokens to the LLM",
+            "It only reads the video title",
+            "It converts video to audio first"
+        ],
+        answer: 1,
+        explanation: "Video is processed by sampling key frames at intervals, encoding each frame into tokens, then feeding all frame tokens to the LLM as a sequence."
+    },
+    {
+        category: "Multimodal AI",
+        q: "What is CLIP?",
+        options: [
+            "A video editing tool",
+            "A model trained to match images with text descriptions",
+            "A compression algorithm",
+            "A programming language"
+        ],
+        answer: 1,
+        explanation: "CLIP (by OpenAI) was trained on millions of image-text pairs to learn the relationship between visual content and language."
+    },
+    {
+        category: "Multimodal AI",
+        q: "Why is multimodal AI possible?",
+        options: [
+            "Because images are secretly text files",
+            "Because all data types can be represented as sequences of numerical vectors",
+            "Because GPUs can display images",
+            "Because of faster internet speeds"
+        ],
+        answer: 1,
+        explanation: "The key insight is that images, text, audio, and video can all be represented as sequences of numerical vectors, allowing a Transformer to process them uniformly."
+    },
+
+    // === EFFICIENCY ===
+    {
+        category: "Using AI Efficiently",
+        q: "What does the 'C' in the CRAFT prompting framework stand for?",
+        options: [
+            "Code",
+            "Context",
+            "Creative",
+            "Chain"
+        ],
+        answer: 1,
+        explanation: "CRAFT = Context, Role, Action, Format, Tone. Context means providing background information about your situation."
+    },
+    {
+        category: "Using AI Efficiently",
+        q: "What is the best approach when AI gives you an imperfect answer?",
+        options: [
+            "Start a completely new conversation",
+            "Switch to a different AI model",
+            "Iterate and refine your prompt to improve the answer",
+            "Accept the answer as-is"
+        ],
+        answer: 2,
+        explanation: "Iterating on your prompt is more efficient than starting over. Refine by adding constraints, examples, or corrections."
+    },
+    {
+        category: "Using AI Efficiently",
+        q: "Which model tier should you use for simple classification tasks?",
+        options: [
+            "Opus (most expensive, most capable)",
+            "Sonnet (mid-tier)",
+            "Haiku (fast, cheap)",
+            "It doesn't matter"
+        ],
+        answer: 2,
+        explanation: "For simple tasks like classification, extraction, or formatting, a smaller/cheaper model like Haiku is sufficient and much more cost-effective."
+    },
+    {
+        category: "Using AI Efficiently",
+        q: "What is 'hallucination' in AI?",
+        options: [
+            "When the AI crashes",
+            "When the AI generates confident but incorrect information",
+            "When the AI refuses to answer",
+            "When the AI generates images"
+        ],
+        answer: 1,
+        explanation: "Hallucination is when an AI produces plausible-sounding but factually incorrect information with high confidence."
+    },
+    {
+        category: "Using AI Efficiently",
+        q: "What should you always do with AI-generated code?",
+        options: [
+            "Deploy it directly to production",
+            "Trust it if it looks correct",
+            "Run it and write tests to verify it works",
+            "Only use it for documentation"
+        ],
+        answer: 2,
+        explanation: "Always run and test AI-generated code. Just because it looks correct or compiles doesn't mean it's bug-free."
+    },
+    {
+        category: "Using AI Efficiently",
+        q: "Why should you break complex tasks into smaller steps for AI?",
+        options: [
+            "Because AI can only process 10 words at a time",
+            "Because smaller tasks get better, more focused results",
+            "Because it's cheaper per token",
+            "Because AI can't understand long text"
+        ],
+        answer: 1,
+        explanation: "Breaking complex tasks into steps allows the AI to focus on each part, producing higher quality results than trying to do everything at once."
+    },
+    {
+        category: "Using AI Efficiently",
+        q: "What is prompt caching used for?",
+        options: [
+            "Saving prompts to a text file",
+            "Reusing repeated system prompts to save cost and latency",
+            "Caching model weights on disk",
+            "Storing conversation history in a database"
+        ],
+        answer: 1,
+        explanation: "Prompt caching allows repeated parts of prompts (like system instructions) to be cached, reducing token processing cost and response latency."
+    },
+];
+
+let answered = {};
+
+function renderQuiz() {
+    const container = document.getElementById('quiz-container');
+    let currentCategory = '';
+    let html = '';
+
+    questions.forEach((q, i) => {
+        if (q.category !== currentCategory) {
+            currentCategory = q.category;
+            html += `<h3 style="margin-top:2rem;">${currentCategory}</h3>`;
+        }
+        html += `
+        <div class="quiz-question" id="q${i}" style="
+            background:#0f172a; border:1px solid #334155; border-radius:10px;
+            padding:1.2rem 1.5rem; margin:1rem 0;
+        ">
+            <p style="margin-bottom:0.8rem;">
+                <strong style="color:#38bdf8;">Q${i+1}.</strong> ${q.q}
+            </p>
+            <div class="quiz-options">
+                ${q.options.map((opt, j) => `
+                    <div class="quiz-opt" id="q${i}o${j}" onclick="checkAnswer(${i}, ${j})" style="
+                        padding:0.6rem 1rem; margin:0.4rem 0; border-radius:8px;
+                        border:1px solid #334155; cursor:pointer;
+                        transition: all 0.2s;
+                    " onmouseover="if(!answered[${i}]) this.style.borderColor='#475569'"
+                       onmouseout="if(!answered[${i}]) this.style.borderColor='#334155'">
+                        <span style="color:#818cf8; font-weight:600; margin-right:0.5rem;">
+                            ${'ABCD'[j]}.
+                        </span>${opt}
+                    </div>
+                `).join('')}
+            </div>
+            <div id="exp${i}" style="display:none; margin-top:0.8rem; padding:0.8rem 1rem;
+                border-radius:8px; font-size:0.9rem;"></div>
+        </div>`;
+    });
+
+    container.innerHTML = html;
+}
+
+function checkAnswer(qi, oi) {
+    if (answered[qi] !== undefined) return;
+    answered[qi] = oi;
+
+    const correct = questions[qi].answer;
+    const isCorrect = oi === correct;
+
+    // Highlight selected
+    const selected = document.getElementById(`q${qi}o${oi}`);
+    selected.style.background = isCorrect ? 'rgba(74,222,128,0.15)' : 'rgba(248,113,113,0.15)';
+    selected.style.borderColor = isCorrect ? '#4ade80' : '#f87171';
+
+    // If wrong, also highlight the correct one
+    if (!isCorrect) {
+        const correctEl = document.getElementById(`q${qi}o${correct}`);
+        correctEl.style.background = 'rgba(74,222,128,0.15)';
+        correctEl.style.borderColor = '#4ade80';
+    }
+
+    // Disable hover on all options
+    const qDiv = document.getElementById(`q${qi}`);
+    qDiv.querySelectorAll('.quiz-opt').forEach(el => {
+        el.style.cursor = 'default';
+    });
+
+    // Show explanation
+    const exp = document.getElementById(`exp${qi}`);
+    exp.style.display = 'block';
+    exp.style.background = isCorrect ? 'rgba(74,222,128,0.08)' : 'rgba(248,113,113,0.08)';
+    exp.style.borderLeft = `4px solid ${isCorrect ? '#4ade80' : '#f87171'}`;
+    exp.innerHTML = `<strong style="color:${isCorrect ? '#4ade80' : '#f87171'}">
+        ${isCorrect ? 'Correct!' : 'Incorrect.'}</strong> ${questions[qi].explanation}`;
+
+    updateScore();
+}
+
+function updateScore() {
+    const total = Object.keys(answered).length;
+    const correct = Object.values(answered).filter((v, i) =>
+        v === questions[Object.keys(answered)[Object.values(answered).indexOf(v)]]?.answer
+    ).length;
+
+    // Recount properly
+    let c = 0;
+    for (const [qi, oi] of Object.entries(answered)) {
+        if (oi === questions[parseInt(qi)].answer) c++;
+    }
+
+    document.getElementById('score-correct').textContent = c;
+    const pct = total > 0 ? Math.round((c / total) * 100) : 0;
+    const pctEl = document.getElementById('score-pct');
+    pctEl.textContent = `${c}/${total} answered — ${pct}%`;
+    pctEl.style.color = pct >= 80 ? '#4ade80' : pct >= 50 ? '#fbbf24' : '#f87171';
+}
+
+function resetQuiz() {
+    answered = {};
+    document.getElementById('score-correct').textContent = '0';
+    document.getElementById('score-pct').textContent = '0%';
+    document.getElementById('score-pct').style.color = '#94a3b8';
+    renderQuiz();
+}
+
+renderQuiz();
+</script>
+
+</body>
+</html>
