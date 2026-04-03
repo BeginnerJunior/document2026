@@ -1,1150 +1,1167 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Fundamental Concepts</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Literacy Manual — Ngernturbo 2026</title>
+  <style>
+    :root {
+      --bg: #f7f8fc;
+      --surface: #ffffff;
+      --border: #e2e6ef;
+      --accent: #2563eb;
+      --accent-light: #eff6ff;
+      --accent-dark: #1d4ed8;
+      --text: #1e2535;
+      --muted: #64748b;
+      --danger: #dc2626;
+      --danger-bg: #fef2f2;
+      --warning: #d97706;
+      --warning-bg: #fffbeb;
+      --success: #16a34a;
+      --success-bg: #f0fdf4;
+      --code-bg: #1e2535;
+      --code-text: #e2e8f0;
+      --nav-width: 260px;
+      --radius: 10px;
+    }
 
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: #0f172a;
-            color: #e2e8f0;
-            line-height: 1.7;
-            padding: 2rem;
-        }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-        .container {
-            max-width: 960px;
-            margin: 0 auto;
-        }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      display: flex;
+    }
 
-        h1 {
-            text-align: center;
-            font-size: 2.5rem;
-            background: linear-gradient(135deg, #38bdf8, #818cf8, #c084fc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 0.5rem;
-        }
+    /* ── SIDEBAR ── */
+    #sidebar {
+      position: fixed;
+      top: 0; left: 0;
+      width: var(--nav-width);
+      height: 100vh;
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      z-index: 100;
+    }
 
-        .subtitle {
-            text-align: center;
-            color: #94a3b8;
-            margin-bottom: 2.5rem;
-            font-size: 1.1rem;
-        }
+    .sidebar-header {
+      padding: 24px 20px 18px;
+      border-bottom: 1px solid var(--border);
+    }
 
-        /* Navigation */
-        nav {
-            background: #1e293b;
-            border-radius: 12px;
-            padding: 1.5rem 2rem;
-            margin-bottom: 2.5rem;
-            border: 1px solid #334155;
-        }
+    .sidebar-header .org {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 4px;
+    }
 
-        nav h2 {
-            color: #38bdf8;
-            font-size: 1.1rem;
-            margin-bottom: 0.8rem;
-        }
+    .sidebar-header h1 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1.35;
+    }
 
-        nav ol {
-            columns: 2;
-            column-gap: 2rem;
-            padding-left: 1.2rem;
-        }
+    .sidebar-header .meta {
+      margin-top: 8px;
+      font-size: 11px;
+      color: var(--muted);
+    }
 
-        nav li {
-            margin-bottom: 0.4rem;
-        }
+    nav { padding: 12px 0; flex: 1; }
 
-        nav a {
-            color: #94a3b8;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
+    nav a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 20px;
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 500;
+      border-left: 3px solid transparent;
+      transition: all .15s;
+    }
 
-        nav a:hover { color: #38bdf8; }
+    nav a:hover {
+      background: var(--accent-light);
+      color: var(--accent);
+    }
 
-        /* Sections */
-        .section {
-            background: #1e293b;
-            border-radius: 12px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            border: 1px solid #334155;
-            transition: border-color 0.3s;
-        }
+    nav a.active {
+      background: var(--accent-light);
+      color: var(--accent-dark);
+      border-left-color: var(--accent);
+      font-weight: 600;
+    }
 
-        .section:hover { border-color: #475569; }
+    nav a .num {
+      min-width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: var(--border);
+      color: var(--muted);
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
 
-        h2 {
-            font-size: 1.6rem;
-            color: #38bdf8;
-            margin-bottom: 1rem;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid #334155;
-        }
+    nav a.active .num {
+      background: var(--accent);
+      color: #fff;
+    }
 
-        h3 {
-            font-size: 1.2rem;
-            color: #818cf8;
-            margin: 1.5rem 0 0.8rem 0;
-        }
+    nav .nav-group-label {
+      padding: 16px 20px 4px;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--border);
+    }
 
-        h4 {
-            font-size: 1.05rem;
-            color: #c084fc;
-            margin: 1.2rem 0 0.6rem 0;
-        }
+    /* ── MAIN ── */
+    main {
+      margin-left: var(--nav-width);
+      flex: 1;
+      padding: 0;
+    }
 
-        p { margin-bottom: 0.8rem; }
+    /* ── PAGE SECTIONS ── */
+    .page {
+      display: none;
+      min-height: 100vh;
+      padding: 48px 52px 80px;
+      max-width: 900px;
+    }
 
-        strong { color: #f1f5f9; }
+    .page.active { display: block; }
 
-        ul, ol {
-            padding-left: 1.5rem;
-            margin-bottom: 1rem;
-        }
+    /* ── PAGE HEADER ── */
+    .page-header {
+      margin-bottom: 40px;
+      padding-bottom: 24px;
+      border-bottom: 2px solid var(--border);
+    }
 
-        li { margin-bottom: 0.4rem; }
+    .module-badge {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      background: var(--accent);
+      color: #fff;
+      margin-bottom: 10px;
+    }
 
-        code {
-            background: #0f172a;
-            color: #38bdf8;
-            padding: 0.15rem 0.5rem;
-            border-radius: 4px;
-            font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
-            font-size: 0.9em;
-        }
+    .module-badge.overview { background: #7c3aed; }
+    .module-badge.m1 { background: #2563eb; }
+    .module-badge.m2 { background: #dc2626; }
+    .module-badge.m3 { background: #d97706; }
+    .module-badge.m4 { background: #16a34a; }
+    .module-badge.m5 { background: #0891b2; }
+    .module-badge.m6 { background: #7c3aed; }
+    .module-badge.ref { background: #475569; }
 
-        pre {
-            background: #0f172a;
-            border: 1px solid #334155;
-            border-radius: 8px;
-            padding: 1.2rem;
-            overflow-x: auto;
-            margin: 1rem 0;
-            font-family: 'Cascadia Code', 'Fira Code', Consolas, monospace;
-            font-size: 0.85rem;
-            line-height: 1.6;
-            color: #cbd5e1;
-        }
+    .page-header h2 {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--text);
+      line-height: 1.25;
+    }
 
-        /* Tables */
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 1rem 0;
-            font-size: 0.95rem;
-        }
+    .page-header p.subtitle {
+      margin-top: 8px;
+      font-size: 15px;
+      color: var(--muted);
+    }
 
-        th {
-            background: #0f172a;
-            color: #38bdf8;
-            padding: 0.75rem 1rem;
-            text-align: left;
-            font-weight: 600;
-            border-bottom: 2px solid #334155;
-        }
+    /* ── TYPOGRAPHY ── */
+    h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+      margin: 36px 0 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border);
+    }
 
-        td {
-            padding: 0.65rem 1rem;
-            border-bottom: 1px solid #1e293b;
-        }
+    h4 {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+      margin: 24px 0 8px;
+    }
 
-        tr:nth-child(even) td { background: rgba(15, 23, 42, 0.4); }
-        tr:hover td { background: rgba(56, 189, 248, 0.05); }
+    p { margin-bottom: 14px; font-size: 15px; }
 
-        /* Blockquote */
-        blockquote {
-            border-left: 4px solid #818cf8;
-            background: rgba(129, 140, 248, 0.08);
-            padding: 1rem 1.5rem;
-            border-radius: 0 8px 8px 0;
-            margin: 1rem 0;
-            font-style: italic;
-        }
+    ul, ol {
+      padding-left: 22px;
+      margin-bottom: 14px;
+    }
 
-        /* Badges / Tags */
-        .badge {
-            display: inline-block;
-            padding: 0.2rem 0.7rem;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            margin-right: 0.3rem;
-        }
+    li { font-size: 15px; margin-bottom: 5px; }
 
-        .badge-blue { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
-        .badge-purple { background: rgba(192, 132, 252, 0.15); color: #c084fc; }
-        .badge-green { background: rgba(74, 222, 128, 0.15); color: #4ade80; }
+    strong { color: var(--text); }
 
-        /* Highlight box */
-        .highlight-box {
-            background: linear-gradient(135deg, rgba(56, 189, 248, 0.1), rgba(129, 140, 248, 0.1));
-            border: 1px solid #334155;
-            border-radius: 10px;
-            padding: 1.5rem;
-            margin: 1.5rem 0;
-        }
+    /* ── CALLOUTS ── */
+    .callout {
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin: 20px 0;
+      font-size: 14px;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
 
-        .tip {
-            background: rgba(74, 222, 128, 0.08);
-            border-left: 4px solid #4ade80;
-            padding: 1rem 1.5rem;
-            border-radius: 0 8px 8px 0;
-            margin: 1rem 0;
-        }
+    .callout .icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
 
-        .tip::before {
-            content: "Tip: ";
-            color: #4ade80;
-            font-weight: 700;
-        }
+    .callout.info {
+      background: var(--accent-light);
+      border-left: 4px solid var(--accent);
+      color: #1d4ed8;
+    }
 
-        .warning {
-            background: rgba(251, 191, 36, 0.08);
-            border-left: 4px solid #fbbf24;
-            padding: 1rem 1.5rem;
-            border-radius: 0 8px 8px 0;
-            margin: 1rem 0;
-        }
+    .callout.warning {
+      background: var(--warning-bg);
+      border-left: 4px solid var(--warning);
+      color: #92400e;
+    }
 
-        .warning::before {
-            content: "Warning: ";
-            color: #fbbf24;
-            font-weight: 700;
-        }
+    .callout.danger {
+      background: var(--danger-bg);
+      border-left: 4px solid var(--danger);
+      color: #991b1b;
+    }
 
-        /* Diagram boxes */
-        .diagram {
-            text-align: center;
-            padding: 1.5rem;
-            margin: 1rem 0;
-        }
+    .callout.success {
+      background: var(--success-bg);
+      border-left: 4px solid var(--success);
+      color: #14532d;
+    }
 
-        .flow {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin: 1rem 0;
-        }
+    /* ── TABLES ── */
+    .table-wrap { overflow-x: auto; margin: 20px 0; border-radius: var(--radius); box-shadow: 0 1px 4px rgba(0,0,0,.07); }
 
-        .flow-item {
-            background: #0f172a;
-            border: 1px solid #334155;
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            font-size: 0.9rem;
-        }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      background: var(--surface);
+    }
 
-        .flow-arrow {
-            color: #38bdf8;
-            font-size: 1.2rem;
-        }
+    thead tr { background: var(--text); color: #fff; }
 
-        /* Footer */
-        footer {
-            text-align: center;
-            color: #475569;
-            padding: 2rem 0 1rem;
-            font-size: 0.85rem;
-        }
+    thead th {
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 12px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
 
-        /* Responsive */
-        @media (max-width: 768px) {
-            body { padding: 1rem; }
-            h1 { font-size: 1.8rem; }
-            nav ol { columns: 1; }
-            .section { padding: 1.5rem; }
-            pre { font-size: 0.75rem; }
-        }
-    </style>
+    tbody tr { border-bottom: 1px solid var(--border); }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:nth-child(even) { background: #f8fafc; }
+    tbody tr:hover { background: var(--accent-light); }
+
+    td { padding: 11px 16px; vertical-align: top; line-height: 1.5; }
+
+    td strong { color: var(--accent-dark); }
+
+    /* ── CODE ── */
+    pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      border-radius: var(--radius);
+      padding: 20px 22px;
+      margin: 20px 0;
+      overflow-x: auto;
+      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      font-size: 13px;
+      line-height: 1.65;
+    }
+
+    code {
+      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      font-size: 12.5px;
+      background: #eef2ff;
+      color: #3730a3;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+
+    pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
+
+    /* ── CARDS ── */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 16px;
+      margin: 20px 0;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      transition: box-shadow .15s;
+    }
+
+    .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.09); }
+
+    .card .card-num {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--accent);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .card h4 { margin: 0 0 6px; font-size: 14px; }
+    .card p { font-size: 13px; color: var(--muted); margin: 0; }
+
+    /* ── RULES LIST ── */
+    .rules-list { list-style: none; padding: 0; }
+
+    .rules-list li {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 16px 20px;
+      margin-bottom: 12px;
+      font-size: 15px;
+    }
+
+    .rules-list li .rule-num {
+      min-width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ── CHECKLIST ── */
+    .checklist { list-style: none; padding: 0; }
+
+    .checklist li {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 7px 0;
+      font-size: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .checklist li:last-child { border-bottom: none; }
+
+    .checklist li::before {
+      content: "☐";
+      font-size: 16px;
+      color: var(--accent);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    /* ── COVER PAGE ── */
+    .cover-hero {
+      background: linear-gradient(135deg, #1e2535 0%, #2563eb 100%);
+      color: #fff;
+      border-radius: 16px;
+      padding: 52px 48px;
+      margin-bottom: 40px;
+    }
+
+    .cover-hero .tag {
+      display: inline-block;
+      background: rgba(255,255,255,.15);
+      border: 1px solid rgba(255,255,255,.25);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-bottom: 18px;
+    }
+
+    .cover-hero h2 {
+      font-size: 34px;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 14px;
+    }
+
+    .cover-hero p {
+      font-size: 15px;
+      opacity: .8;
+      margin-bottom: 0;
+    }
+
+    .cover-meta {
+      display: flex;
+      gap: 28px;
+      flex-wrap: wrap;
+      margin-top: 28px;
+      padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,.2);
+    }
+
+    .cover-meta div { font-size: 13px; opacity: .9; }
+    .cover-meta .label { font-size: 10px; opacity: .6; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 2px; }
+
+    .module-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 14px;
+      margin-top: 8px;
+    }
+
+    .module-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px;
+      cursor: pointer;
+      transition: all .15s;
+      text-decoration: none;
+      color: var(--text);
+      display: block;
+    }
+
+    .module-card:hover {
+      border-color: var(--accent);
+      box-shadow: 0 4px 20px rgba(37,99,235,.12);
+      transform: translateY(-2px);
+    }
+
+    .module-card .badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+    }
+
+    .module-card h3 {
+      font-size: 14px;
+      font-weight: 700;
+      border: none;
+      margin: 0 0 6px;
+      padding: 0;
+    }
+
+    .module-card p { font-size: 12px; color: var(--muted); margin: 0; }
+
+    /* ── DECISION TREE ── */
+    .decision-tree { margin: 20px 0; }
+
+    .decision-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 12px 16px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .decision-step .q {
+      min-width: 24px;
+      height: 24px;
+      background: var(--warning);
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    .decision-step .arrow { color: var(--accent); font-weight: 700; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 768px) {
+      #sidebar { transform: translateX(-100%); }
+      main { margin-left: 0; }
+      .page { padding: 32px 20px 60px; }
+    }
+
+    /* ── SCROLLBAR ── */
+    #sidebar::-webkit-scrollbar { width: 4px; }
+    #sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+  </style>
 </head>
 <body>
-<div class="container">
 
-    <h1>AI Fundamental Concepts</h1>
-    <p class="subtitle">A complete guide to understanding modern AI &mdash; 2026 Edition</p>
+<!-- ════════════════ SIDEBAR ════════════════ -->
+<aside id="sidebar">
+  <div class="sidebar-header">
+    <div class="org">Ngernturbo (SET: TURBO)</div>
+    <h1>AI Literacy Manual 2026</h1>
+    <div class="meta">By Sutach Ruangsuttipap · March 2026</div>
+  </div>
 
-    <!-- Table of Contents -->
-    <nav>
-        <h2>Table of Contents</h2>
-        <ol>
-            <li><a href="#tokens">Tokens</a></li>
-            <li><a href="#context-window">Context Window</a></li>
-            <li><a href="#temperature">Temperature</a></li>
-            <li><a href="#top-p">Top-p (Nucleus Sampling)</a></li>
-            <li><a href="#prompting">Prompting Techniques</a></li>
-            <li><a href="#parameters">Other Key Parameters</a></li>
-            <li><a href="#cheatsheet">Summary Cheat Sheet</a></li>
-            <li><a href="#multimodal">How AI Understands Images &amp; Video</a></li>
-            <li><a href="#efficiency">How to Use AI Efficiently</a></li>
-            <li><a href="#quiz">Practice Quiz (30 Questions)</a></li>
-        </ol>
-    </nav>
+  <nav>
+    <div class="nav-group-label">Contents</div>
+    <a href="#" class="active" onclick="showPage('overview', this)">
+      <span class="num">0</span> Overview
+    </a>
+    <a href="#" onclick="showPage('m1', this)">
+      <span class="num">1</span> AI Under the Hood
+    </a>
+    <a href="#" onclick="showPage('m2', this)">
+      <span class="num">2</span> Failure Modes
+    </a>
+    <a href="#" onclick="showPage('m3', this)">
+      <span class="num">3</span> Model Selection
+    </a>
+    <a href="#" onclick="showPage('m4', this)">
+      <span class="num">4</span> Prompt Engineering
+    </a>
+    <a href="#" onclick="showPage('m5', this)">
+      <span class="num">5</span> Production Workflows
+    </a>
+    <a href="#" onclick="showPage('m6', this)">
+      <span class="num">6</span> Data Security &amp; Ethics
+    </a>
+    <a href="#" onclick="showPage('ref', this)">
+      <span class="num">★</span> Quick Reference
+    </a>
+  </nav>
+</aside>
 
-    <!-- ==================== SECTION 1: TOKENS ==================== -->
-    <div class="section" id="tokens">
-        <h2>1. Tokens</h2>
-        <p>The <strong>smallest unit</strong> an LLM processes. Text is split into tokens before processing.</p>
-        <ul>
-            <li>A token is roughly <strong>&frac34; of a word</strong> in English (e.g., "unhappiness" &rarr; <code>un</code>, <code>happiness</code>)</li>
-            <li>Models have a <strong>token limit</strong> that governs how much they can read and generate.</li>
-            <li>Cost/pricing is typically measured <strong>per token</strong> (input and output separately).</li>
-        </ul>
-        <div class="tip">Think of tokens like puzzle pieces &mdash; the model reads and generates one piece at a time.</div>
+<!-- ════════════════ MAIN ════════════════ -->
+<main>
+
+  <!-- ── OVERVIEW ── -->
+  <section id="page-overview" class="page active">
+    <div class="cover-hero">
+      <div class="tag">Internal Use Only</div>
+      <h2>AI Literacy for the<br>Modern Workplace</h2>
+      <p>A comprehensive AI literacy reference for all departments — HR, Admin, Marketing, Operations, Customer Service, Finance, Engineering, and Management.</p>
+      <div class="cover-meta">
+        <div><div class="label">Organization</div>Ngernturbo Public Company Limited</div>
+        <div><div class="label">Author</div>Sutach Ruangsuttipap</div>
+        <div><div class="label">Date</div>March 2026</div>
+        <div><div class="label">Modules</div>6 Modules + Reference</div>
+      </div>
     </div>
 
-    <!-- ==================== SECTION 2: CONTEXT WINDOW ==================== -->
-    <div class="section" id="context-window">
-        <h2>2. Context Window</h2>
-        <p>The <strong>maximum number of tokens</strong> a model can handle in a single conversation (input + output combined).</p>
-        <table>
-            <tr><th>Model</th><th>Context Window</th></tr>
-            <tr><td>GPT-4o</td><td>~128K tokens</td></tr>
-            <tr><td>Claude Opus 4.6</td><td>~1M tokens</td></tr>
-            <tr><td>Gemini 1.5 Pro</td><td>~2M tokens</td></tr>
-        </table>
-        <ul>
-            <li>Larger context = can process more information at once (entire codebases, long documents).</li>
-            <li><strong>Limitation:</strong> performance can degrade on information in the "middle" of very long contexts ("lost in the middle" problem).</li>
-        </ul>
+    <h3>About This Manual</h3>
+    <p>This manual closes the gap between using AI and using it <strong>well, safely, and responsibly</strong>. It covers how AI models work, where they fail, how to choose the right model, and how to protect company data — with practical templates ready to use today.</p>
+
+    <h3>Modules at a Glance</h3>
+    <div class="module-cards">
+      <a class="module-card" href="#" onclick="showPageByName('m1')">
+        <span class="badge" style="background:#eff6ff;color:#2563eb">Module 1</span>
+        <h3>AI Under the Hood</h3>
+        <p>How LLMs work, tokenization, context windows, and pricing.</p>
+      </a>
+      <a class="module-card" href="#" onclick="showPageByName('m2')">
+        <span class="badge" style="background:#fef2f2;color:#dc2626">Module 2</span>
+        <h3>Failure Modes</h3>
+        <p>Hallucinations, attention degradation, bias, and risk tiers.</p>
+      </a>
+      <a class="module-card" href="#" onclick="showPageByName('m3')">
+        <span class="badge" style="background:#fffbeb;color:#d97706">Module 3</span>
+        <h3>Model Selection</h3>
+        <p>Reasoning vs. non-reasoning models, RAG, decision framework.</p>
+      </a>
+      <a class="module-card" href="#" onclick="showPageByName('m4')">
+        <span class="badge" style="background:#f0fdf4;color:#16a34a">Module 4</span>
+        <h3>Prompt Engineering</h3>
+        <p>RTCF framework, advanced techniques, anti-patterns.</p>
+      </a>
+      <a class="module-card" href="#" onclick="showPageByName('m5')">
+        <span class="badge" style="background:#ecfeff;color:#0891b2">Module 5</span>
+        <h3>Production Workflows</h3>
+        <p>Ready-to-use templates for email, contracts, meetings, data.</p>
+      </a>
+      <a class="module-card" href="#" onclick="showPageByName('m6')">
+        <span class="badge" style="background:#f5f3ff;color:#7c3aed">Module 6</span>
+        <h3>Security &amp; Ethics</h3>
+        <p>Data classification, PDPA, accountability, and zero-tolerance rules.</p>
+      </a>
     </div>
 
-    <!-- ==================== SECTION 3: TEMPERATURE ==================== -->
-    <div class="section" id="temperature">
-        <h2>3. Temperature</h2>
-        <p>Controls <strong>randomness/creativity</strong> of the model's output.</p>
-        <table>
-            <tr><th>Value</th><th>Behavior</th><th>Use Case</th></tr>
-            <tr><td><code>0.0</code></td><td>Deterministic, most probable answer</td><td>Code, math, factual Q&amp;A</td></tr>
-            <tr><td><code>0.3 &ndash; 0.7</code></td><td>Balanced creativity</td><td>General conversation, writing</td></tr>
-            <tr><td><code>1.0+</code></td><td>Highly random, creative</td><td>Brainstorming, storytelling</td></tr>
-        </table>
-        <ul>
-            <li>Technically: temperature scales the probability distribution over the next token.</li>
-            <li><code>temperature=0</code> &rarr; always picks the highest-probability token.</li>
-        </ul>
+    <h3>The Five Non-Negotiable Rules</h3>
+    <ul class="rules-list">
+      <li><span class="rule-num">1</span><div><strong>Never trust AI output without independent verification.</strong> Hallucinations are inherent, not bugs.</div></li>
+      <li><span class="rule-num">2</span><div><strong>Never use personal AI accounts for company data.</strong> Consumer AI may train on your inputs.</div></li>
+      <li><span class="rule-num">3</span><div><strong>Classify data before every AI interaction.</strong> Public → anywhere. Internal → enterprise only. Confidential/Restricted → strict protocols.</div></li>
+      <li><span class="rule-num">4</span><div><strong>Match the tool to the task.</strong> Chat for drafting. Code Execution for math. Reasoning models for logic. Specialized tools for domain tasks.</div></li>
+      <li><span class="rule-num">5</span><div><strong>You own the output.</strong> You are the final quality gate. AI is the tool; you are the intelligence.</div></li>
+    </ul>
+  </section>
+
+  <!-- ── MODULE 1 ── -->
+  <section id="page-m1" class="page">
+    <div class="page-header">
+      <span class="module-badge m1">Module 1</span>
+      <h2>AI Under the Hood</h2>
+      <p class="subtitle">How LLMs actually work — architecture, tokenization, context, and pricing.</p>
     </div>
 
-    <!-- ==================== SECTION 4: TOP-P ==================== -->
-    <div class="section" id="top-p">
-        <h2>4. Top-p (Nucleus Sampling)</h2>
-        <ul>
-            <li>An alternative to temperature for controlling randomness.</li>
-            <li><code>top_p=0.9</code> means: only consider tokens whose cumulative probability adds up to 90%.</li>
-            <li>Lower top-p = more focused; higher top-p = more diverse.</li>
-            <li>Often used <strong>together</strong> with temperature.</li>
-        </ul>
-
-        <div class="highlight-box">
-            <h4>Quick Comparison</h4>
-<pre>Precision &laquo;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&mdash;&raquo; Creativity
-
-temp=0          temp=0.5          temp=1.0
-top_p=0.1       top_p=0.5         top_p=0.95</pre>
-        </div>
+    <h3>What an LLM Actually Is</h3>
+    <p>A Large Language Model (LLM) is a neural network that <strong>predicts the next token</strong> in a sequence. It does not think, reason, or understand — it performs sophisticated statistical pattern matching on training data. Output sounds intelligent because the training data was produced by intelligent humans, not because the model itself understands.</p>
+    <div class="callout info">
+      <span class="icon">💡</span>
+      <div><strong>Core insight:</strong> LLMs are next-token prediction engines. They sound confident even when completely wrong.</div>
     </div>
 
-    <!-- ==================== SECTION 5: PROMPTING ==================== -->
-    <div class="section" id="prompting">
-        <h2>5. Prompting Techniques</h2>
+    <h3>Architecture (Transformer)</h3>
+    <ul>
+      <li><strong>Embedding Layer:</strong> Converts tokens to dense vectors (~12,288 dimensions for GPT-4). Adds positional encoding so word order is preserved.</li>
+      <li><strong>Transformer Blocks:</strong> ~96 stacked layers, each refining token representations via self-attention.</li>
+      <li><strong>Self-Attention:</strong> Each token computes Query (Q), Key (K), Value (V) vectors.<br><code>Attention(Q,K,V) = softmax(Q·Kᵀ / √dₖ) · V</code></li>
+      <li><strong>Multi-Head Attention:</strong> GPT-4 uses 128 attention heads per layer, each learning different relationship types.</li>
+      <li><strong>Output Layer:</strong> Softmax converts raw scores into a probability distribution over ~100,000 vocabulary tokens.</li>
+    </ul>
 
-        <h3>Zero-Shot</h3>
-        <p>Ask the model to do something <strong>with no examples</strong>. It relies entirely on pre-trained knowledge.</p>
-<pre>Classify this review as positive or negative:
-"The food was terrible." &rarr; ?</pre>
+    <h3>Tokenization</h3>
+    <p>LLMs read <strong>tokens</strong>, not words (using Byte Pair Encoding). Key implications:</p>
+    <ul>
+      <li>Non-English text (Thai, Chinese, Japanese) uses <strong>2–4× more tokens</strong> than English equivalents.</li>
+      <li>Numbers tokenize unpredictably — this is why LLMs <strong>cannot do arithmetic</strong> natively.</li>
+      <li>~1 token ≈ 0.75 English words. A 50-page PDF ≈ 75,000 tokens.</li>
+    </ul>
 
-        <h3>One-Shot</h3>
-        <p>Provide <strong>one example</strong> before the actual task.</p>
-<pre>Classify:
-"Great service!" &rarr; Positive
-
-"The food was terrible." &rarr; ?</pre>
-
-        <h3>Few-Shot</h3>
-        <p>Provide <strong>a few examples</strong> (typically 2&ndash;5) to guide the model.</p>
-<pre>Classify:
-"Great service!"    &rarr; Positive
-"Awful experience." &rarr; Negative
-"It was okay."      &rarr; Neutral
-
-"The food was terrible." &rarr; ?</pre>
-        <div class="tip">More examples = better pattern recognition, but uses more tokens.</div>
-
-        <h3>Chain-of-Thought (CoT)</h3>
-        <p>Instruct the model to <strong>reason step-by-step</strong> before giving the final answer.</p>
-<pre>Q: If a store has 23 apples and sells 17, how many are left?
-
-A: Let's think step by step.
-   - Start with 23 apples
-   - Sold 17 apples
-   - 23 - 17 = 6
-   Answer: 6</pre>
-        <ul>
-            <li>Dramatically improves performance on <strong>math, logic, and multi-step reasoning</strong>.</li>
-            <li>Triggered by adding <strong>"Let's think step by step"</strong> to the prompt.</li>
-        </ul>
-
-        <div class="highlight-box">
-            <h4>When to Use Which?</h4>
-<pre>Simple task?            &rarr; Zero-shot     (just ask)
-Need consistent format? &rarr; Few-shot      (give examples)
-Complex reasoning?      &rarr; Chain-of-Thought (think step by step)
-Very complex task?      &rarr; Break it into subtasks</pre>
-        </div>
+    <h3>API Pricing Reference (2026)</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Model</th><th>Input / 1M tokens</th><th>Output / 1M tokens</th><th>Context</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>GPT-5.4</td><td>$2.50</td><td>$15.00</td><td>1M</td></tr>
+          <tr><td>Claude Opus 4.6</td><td>$15.00</td><td>$75.00</td><td>1M</td></tr>
+          <tr><td>Claude Sonnet 4.6</td><td>$3.00</td><td>$15.00</td><td>1M</td></tr>
+          <tr><td>Claude Haiku 4.5</td><td>$0.80</td><td>$4.00</td><td>200K</td></tr>
+          <tr><td>Gemini 3.1 Pro</td><td>$2.00</td><td>$12.00</td><td>1M</td></tr>
+          <tr><td>Gemini Flash 2.0</td><td>$0.10</td><td>$0.40</td><td>1M</td></tr>
+          <tr><td>o3 (reasoning)</td><td>$10.00</td><td>$40.00</td><td>200K</td></tr>
+          <tr><td>DeepSeek R1</td><td>$0.55</td><td>$2.19</td><td>128K</td></tr>
+        </tbody>
+      </table>
     </div>
 
-    <!-- ==================== SECTION 6: PARAMETERS ==================== -->
-    <div class="section" id="parameters">
-        <h2>6. Other Key Parameters</h2>
-        <table>
-            <tr><th>Parameter</th><th>What it does</th></tr>
-            <tr><td><code>max_tokens</code></td><td>Maximum number of tokens the model will generate</td></tr>
-            <tr><td><code>stop_sequences</code></td><td>Tokens/strings that tell the model to stop generating</td></tr>
-            <tr><td><code>frequency_penalty</code></td><td>Reduces repetition of tokens already used</td></tr>
-            <tr><td><code>presence_penalty</code></td><td>Encourages the model to talk about new topics</td></tr>
-            <tr><td><code>system prompt</code></td><td>Hidden instructions that set the model's behavior/persona</td></tr>
-        </table>
+    <h3>Context Windows</h3>
+    <p>The context window is the model's working memory. Beyond the limit, older content is silently dropped — <strong>without warning</strong>. Performance also degrades as the window fills; recall accuracy can drop <strong>20–40%</strong> near the limit.</p>
+
+    <h3>Decoding Parameters</h3>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Temperature</th><th>Behavior</th><th>Best For</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>0.0</strong></td><td>Deterministic</td><td>Fact extraction, code, data analysis</td></tr>
+          <tr><td><strong>0.3–0.5</strong></td><td>Slightly varied</td><td>Business writing, summarization</td></tr>
+          <tr><td><strong>0.7–1.0</strong></td><td>Creative</td><td>Marketing copy, brainstorming</td></tr>
+          <tr><td><strong>1.5+</strong></td><td>Highly random</td><td>Experimental only</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── MODULE 2 ── -->
+  <section id="page-m2" class="page">
+    <div class="page-header">
+      <span class="module-badge m2">Module 2</span>
+      <h2>Failure Modes</h2>
+      <p class="subtitle">Where AI breaks down — and how to protect against it.</p>
     </div>
 
-    <!-- ==================== SECTION 7: CHEAT SHEET ==================== -->
-    <div class="section" id="cheatsheet">
-        <h2>7. Summary Cheat Sheet</h2>
-        <table>
-            <tr><th>Concept</th><th>One-liner</th></tr>
-            <tr><td><strong>Token</strong></td><td>Smallest text unit the model reads</td></tr>
-            <tr><td><strong>Context Window</strong></td><td>Max tokens per conversation</td></tr>
-            <tr><td><strong>Temperature</strong></td><td>Controls randomness (0 = precise, 1 = creative)</td></tr>
-            <tr><td><strong>Top-p</strong></td><td>Alternative randomness control by probability cutoff</td></tr>
-            <tr><td><strong>Zero-shot</strong></td><td>No examples, just ask</td></tr>
-            <tr><td><strong>Few-shot</strong></td><td>Give examples first, then ask</td></tr>
-            <tr><td><strong>Chain-of-Thought</strong></td><td>Make the model reason step by step</td></tr>
-        </table>
+    <h3>Attention Degradation — "Lost in the Middle"</h3>
+    <p>Recall accuracy follows a <strong>U-shaped curve</strong> — high at the start and end of a document, dropping dramatically in the middle.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Position in Document</th><th>Recall Accuracy</th></tr></thead>
+        <tbody>
+          <tr><td>First 10%</td><td>90%+</td></tr>
+          <tr><td>40–60% (middle)</td><td style="color:#dc2626;font-weight:700">45–55% — DANGER ZONE</td></tr>
+          <tr><td>Last 10%</td><td>85%+</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout warning">
+      <span class="icon">⚠️</span>
+      <div><strong>Mitigations:</strong> Put critical instructions at the start AND end; chunk long documents; use explicit section markers; repeat key constraints at the end.</div>
     </div>
 
-    <!-- ==================== SECTION 8: MULTIMODAL ==================== -->
-    <div class="section" id="multimodal">
-        <h2>8. How AI Understands Images &amp; Video</h2>
-
-        <h3>The Core Idea: Multimodal Models</h3>
-        <p>Traditional LLMs only understand <strong>text</strong>. Multimodal models can process <strong>text + images + audio + video</strong> by converting everything into the same representation.</p>
-
-        <h3>Step 1: Vision Encoder</h3>
-        <p>Images are split into small patches (like a grid), then each patch is converted into a <strong>numerical vector (embedding)</strong>.</p>
-<pre>+---+---+---+---+
-|   |   |   |   |
-+---+---+---+---+   &rarr;  [0.23, 0.87, 0.12, ...]  (patch embeddings)
-|   |   |   |   |   &rarr;  [0.45, 0.31, 0.98, ...]
-+---+---+---+---+   &rarr;  [0.67, 0.54, 0.22, ...]
-|   |   |   |   |   &rarr;  ...
-+---+---+---+---+
-
-Image patches  &rarr;  Vectors (same format as text tokens)</pre>
-        <p>Common vision encoders: <span class="badge badge-blue">ViT</span> <span class="badge badge-purple">CLIP</span> <span class="badge badge-green">SigLIP</span></p>
-
-        <h3>Step 2: Projection Layer</h3>
-        <p>Image embeddings are <strong>mapped into the same space</strong> as text token embeddings, so the LLM can "read" them.</p>
-<pre>Image patches &rarr; Vision Encoder &rarr; Projection &rarr; [image tokens]
-                                                         |
-Text input    &rarr; Tokenizer      &rarr;             [text tokens]
-                                                         |
-                                                  Combined sequence
-                                                         |
-                                                    LLM (Transformer)
-                                                         |
-                                                    Text output</pre>
-
-        <h3>Step 3: The LLM Processes Both Together</h3>
-        <p>The model sees a <strong>single sequence</strong> of tokens &mdash; some from text, some from images. It uses the same attention mechanism on all of them.</p>
-        <ul>
-            <li>Relate text to specific parts of the image</li>
-            <li>Answer questions about what it "sees"</li>
-            <li>Describe, analyze, or reason about visual content</li>
-        </ul>
-
-        <h3>How Video Works</h3>
-        <p>Video is essentially <strong>a sequence of images (frames)</strong>.</p>
-        <div class="flow">
-            <span class="flow-item">Video</span>
-            <span class="flow-arrow">&rarr;</span>
-            <span class="flow-item">Sample Key Frames</span>
-            <span class="flow-arrow">&rarr;</span>
-            <span class="flow-item">Encode Each Frame</span>
-            <span class="flow-arrow">&rarr;</span>
-            <span class="flow-item">Feed All Frame Tokens to LLM</span>
-        </div>
-        <ul>
-            <li>Models <strong>sample frames</strong> at intervals (e.g., 1 per second) &mdash; not every frame is used.</li>
-            <li>Some models process <strong>audio tracks</strong> separately and combine them.</li>
-            <li>Video uses <strong>many more tokens</strong> than a single image.</li>
-        </ul>
-
-        <h3>Key Technologies</h3>
-        <table>
-            <tr><th>Technology</th><th>Role</th></tr>
-            <tr><td><strong>CLIP</strong> (OpenAI)</td><td>Matches images with text descriptions &mdash; foundation for image understanding</td></tr>
-            <tr><td><strong>ViT</strong></td><td>Applies Transformer architecture to image patches</td></tr>
-            <tr><td><strong>Contrastive Learning</strong></td><td>Trains model to link "photo of a cat" with a cat image</td></tr>
-            <tr><td><strong>Cross-Attention</strong></td><td>Lets text tokens "look at" image tokens and vice versa</td></tr>
-        </table>
-
-        <h3>Training Process</h3>
-        <ol>
-            <li><strong>Pre-training:</strong> Show millions of (image, text) pairs &mdash; model learns to connect visuals with words</li>
-            <li><strong>Instruction tuning:</strong> Train on Q&amp;A about images ("What color is the car?" &rarr; "Red")</li>
-            <li><strong>RLHF:</strong> Human feedback to improve accuracy and safety</li>
-        </ol>
-
-        <blockquote>
-            <strong>Images, text, audio, and video can all be represented as sequences of numerical vectors.</strong> Once everything is in the same format, a Transformer can process them all together.
-        </blockquote>
-
-        <h3>Multimodal Summary</h3>
-        <table>
-            <tr><th>Question</th><th>Answer</th></tr>
-            <tr><td>How does AI "see"?</td><td>Splits images into patches, converts to numerical vectors</td></tr>
-            <tr><td>How does it connect image to text?</td><td>Both are mapped to the same vector space</td></tr>
-            <tr><td>How does video work?</td><td>Sample frames &rarr; encode each &rarr; process as a long sequence</td></tr>
-            <tr><td>Why is this possible?</td><td>Transformers can attend to any type of token in a sequence</td></tr>
-        </table>
+    <h3>Four Types of Hallucination</h3>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-num">01</div>
+        <h4>Factual Fabrication</h4>
+        <p>Invented citations, nonexistent cases, fake statistics.<br><em>e.g., Mata v. Avianca 2023 — all 6 legal citations fabricated.</em></p>
+      </div>
+      <div class="card">
+        <div class="card-num">02</div>
+        <h4>Confident Extrapolation</h4>
+        <p>Real knowledge applied outside its valid domain.<br><em>e.g., US tax law applied to Thai questions.</em></p>
+      </div>
+      <div class="card">
+        <div class="card-num">03</div>
+        <h4>Instruction Drift</h4>
+        <p>Long outputs gradually deviate from original instructions.</p>
+      </div>
+      <div class="card">
+        <div class="card-num">04</div>
+        <h4>Sycophantic Agreement</h4>
+        <p>Model agrees with incorrect user premises rather than correcting them.</p>
+      </div>
     </div>
 
-    <!-- ==================== SECTION 9: EFFICIENCY ==================== -->
-    <div class="section" id="efficiency">
-        <h2>9. How to Use AI Efficiently</h2>
-
-        <h3>Write Clear Prompts</h3>
-        <p>The <strong>#1 factor</strong> in getting good results. Be specific about what you want.</p>
-        <table>
-            <tr><th>Bad Prompt</th><th>Good Prompt</th></tr>
-            <tr><td>"Fix my code"</td><td>"Fix the null pointer error in the login function at line 42"</td></tr>
-            <tr><td>"Write about dogs"</td><td>"Write a 200-word paragraph about golden retrievers as family pets"</td></tr>
-            <tr><td>"Help me with SQL"</td><td>"Write a SQL query to find the top 10 customers by total order amount in 2025"</td></tr>
-        </table>
-
-        <h4>The CRAFT Framework</h4>
-        <table>
-            <tr><th>Letter</th><th>Meaning</th><th>Example</th></tr>
-            <tr><td><strong>C</strong></td><td>Context</td><td>"I'm a backend developer working on a REST API..."</td></tr>
-            <tr><td><strong>R</strong></td><td>Role</td><td>"Act as a senior code reviewer..."</td></tr>
-            <tr><td><strong>A</strong></td><td>Action</td><td>"Review this function and suggest improvements..."</td></tr>
-            <tr><td><strong>F</strong></td><td>Format</td><td>"Return the result as a numbered list..."</td></tr>
-            <tr><td><strong>T</strong></td><td>Tone</td><td>"Explain in simple terms for a junior developer..."</td></tr>
-        </table>
-
-        <h3>Choose the Right Temperature</h3>
-        <table>
-            <tr><th>Task</th><th>Temperature</th><th>Why</th></tr>
-            <tr><td>Code generation</td><td>0 &ndash; 0.2</td><td>Need accuracy, not creativity</td></tr>
-            <tr><td>Data analysis</td><td>0 &ndash; 0.3</td><td>Factual, precise answers</td></tr>
-            <tr><td>General writing</td><td>0.5 &ndash; 0.7</td><td>Balance of quality and variety</td></tr>
-            <tr><td>Brainstorming</td><td>0.8 &ndash; 1.0</td><td>Want diverse, creative ideas</td></tr>
-        </table>
-
-        <h3>Break Complex Tasks into Steps</h3>
-        <p>Don't ask AI to do everything at once. <strong>Decompose</strong> large tasks.</p>
-        <div class="warning">Instead of "Build me a complete e-commerce website", break it down:</div>
-        <ol>
-            <li>"Design the database schema for products, users, and orders"</li>
-            <li>"Create the API endpoints for product CRUD operations"</li>
-            <li>"Build the shopping cart logic"</li>
-            <li>"Create the checkout flow"</li>
-        </ol>
-
-        <h3>Iterate, Don't Start Over</h3>
-        <p>If the output isn't perfect, <strong>refine</strong> rather than rewrite.</p>
-<pre>You:  "Write a function to validate emails"
-AI:   [gives basic regex]
-You:  "Also handle edge cases like '+' aliases and subdomains"
-AI:   [improved version]
-You:  "Add unit tests for these cases"
-AI:   [complete solution with tests]</pre>
-
-        <h3>Use System Prompts / Custom Instructions</h3>
-        <p>Set <strong>persistent context</strong> so you don't repeat yourself.</p>
-<pre>System: You are a Python expert. Always use type hints.
-        Follow PEP 8. Prefer list comprehensions over loops.
-        Use pytest for testing.</pre>
-
-        <h3>Manage Token Usage (Save Cost &amp; Speed)</h3>
-        <table>
-            <tr><th>Strategy</th><th>How</th></tr>
-            <tr><td>Be concise</td><td>Remove unnecessary words from prompts</td></tr>
-            <tr><td>Limit output</td><td>"Answer in 3 bullet points" or set max_tokens</td></tr>
-            <tr><td>Use smaller models for simple tasks</td><td>Haiku for classification, Opus for complex reasoning</td></tr>
-            <tr><td>Cache repeated context</td><td>Use prompt caching for repeated system prompts</td></tr>
-            <tr><td>Summarize long inputs</td><td>Compress documents before asking questions</td></tr>
-        </table>
-
-        <h4>Model Selection Guide</h4>
-        <div class="highlight-box">
-<pre>Simple tasks (classify, extract, format)   &rarr; Haiku   (fast, cheap)
-General tasks (write, explain, code)       &rarr; Sonnet  (balanced)
-Complex tasks (architect, research, plan)  &rarr; Opus    (most capable)</pre>
-        </div>
-
-        <h3>Validate AI Output</h3>
-        <p>AI can be <strong>confidently wrong</strong> (hallucination). Always verify:</p>
-        <ul>
-            <li><strong>Code:</strong> Run it. Write tests. Don't just trust it compiles.</li>
-            <li><strong>Facts:</strong> Cross-check important claims with reliable sources.</li>
-            <li><strong>Numbers:</strong> Recalculate critical math independently.</li>
-            <li><strong>Links/URLs:</strong> AI often generates fake URLs. Check them.</li>
-        </ul>
-
-        <h3>Common Mistakes to Avoid</h3>
-        <table>
-            <tr><th>Mistake</th><th>Fix</th></tr>
-            <tr><td>Vague prompts</td><td>Be specific about input, output, and format</td></tr>
-            <tr><td>Too much in one prompt</td><td>Break into smaller tasks</td></tr>
-            <tr><td>Blindly trusting output</td><td>Always review and test</td></tr>
-            <tr><td>Starting over on bad output</td><td>Iterate and refine instead</td></tr>
-            <tr><td>Using the biggest model for everything</td><td>Match model to task complexity</td></tr>
-            <tr><td>Not providing context</td><td>Include relevant background info</td></tr>
-            <tr><td>Ignoring system prompts</td><td>Use them to set consistent behavior</td></tr>
-        </table>
-
-        <h3>Efficiency Formula</h3>
-        <div class="highlight-box" style="text-align:center; font-size:1.05rem;">
-            <strong>Clear Prompt</strong> + <strong>Right Model</strong> + <strong>Right Technique</strong> + <strong>Right Temperature</strong> + <strong>Iteration</strong> + <strong>Validation</strong><br>
-            = <span style="color:#4ade80; font-size:1.2rem; font-weight:700;">Best Results at Lowest Cost</span>
-        </div>
+    <h3>Risk Classification Framework</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Tier</th><th>Type</th><th>Examples</th><th>Guardrail</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong style="color:#16a34a">1 — Low Risk</strong></td>
+            <td>AI generates, human scans</td>
+            <td>Brainstorming, drafts, internal notes</td>
+            <td>Minimal review</td>
+          </tr>
+          <tr>
+            <td><strong style="color:#d97706">2 — Medium Risk</strong></td>
+            <td>AI assists, human verifies</td>
+            <td>Policy summaries, customer comm drafts</td>
+            <td>Mandatory human review before distribution</td>
+          </tr>
+          <tr>
+            <td><strong style="color:#dc2626">3 — High Risk</strong></td>
+            <td>Human decides, AI may inform</td>
+            <td>Legal/financial decisions, hiring, regulatory submissions</td>
+            <td>AI informs only; human makes ALL final decisions</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
-    <!-- ==================== SECTION 10: QUIZ ==================== -->
-    <div class="section" id="quiz">
-        <h2>10. Practice Quiz</h2>
-        <p>Test your understanding! Click an answer to check. Your score is tracked at the bottom.</p>
+    <h3>Systematic Bias Sources</h3>
+    <ul>
+      <li><strong>Training data bias</strong> — Overrepresents English, Western, and historical demographic norms.</li>
+      <li><strong>Recency bias</strong> — Knowledge cutoff means outdated information may be stated confidently.</li>
+      <li><strong>Western/English bias</strong> — Measurably lower quality output in Thai and other non-Latin-script languages.</li>
+      <li><strong>Sycophancy bias</strong> — Tendency to validate user inputs, even incorrect ones.</li>
+    </ul>
+  </section>
 
-        <div id="score-bar" style="
-            position: sticky; top: 0; z-index: 10;
-            background: #0f172a; border: 1px solid #334155; border-radius: 8px;
-            padding: 0.8rem 1.5rem; margin-bottom: 1.5rem;
-            display: flex; justify-content: space-between; align-items: center;
-        ">
-            <span>Score: <strong id="score-correct" style="color:#4ade80;">0</strong> / <strong id="score-total">30</strong></span>
-            <span id="score-pct" style="color:#94a3b8;">0%</span>
-            <button onclick="resetQuiz()" style="
-                background:#334155; color:#e2e8f0; border:none; padding:0.4rem 1rem;
-                border-radius:6px; cursor:pointer; font-size:0.85rem;
-            ">Reset All</button>
-        </div>
-
-        <div id="quiz-container"></div>
+  <!-- ── MODULE 3 ── -->
+  <section id="page-m3" class="page">
+    <div class="page-header">
+      <span class="module-badge m3">Module 3</span>
+      <h2>Model Selection &amp; Architecture</h2>
+      <p class="subtitle">Choosing the right model for the right task.</p>
     </div>
 
-    <div style="text-align:center; margin: 2rem 0;">
-        <a href="AI_Video_Summary.html" style="
-            display: inline-block;
-            background: linear-gradient(135deg, #f472b6, #818cf8, #38bdf8);
-            color: #0f172a;
-            text-decoration: none;
-            padding: 0.8rem 2rem;
-            border-radius: 10px;
-            font-weight: 700;
-            font-size: 1.05rem;
-            transition: opacity 0.2s;
-        " onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">
-            Video Lesson Summaries &rarr;
-        </a>
+    <h3>Reasoning vs. Non-Reasoning Models</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th></th><th>Non-Reasoning (System 1)</th><th>Reasoning (System 2)</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Examples</strong></td><td>GPT-5 mini, Claude Haiku 4.5, Gemini Flash 2.0</td><td>o3, o4-mini, DeepSeek R1, Claude Opus/Sonnet extended thinking</td></tr>
+          <tr><td><strong>Mechanism</strong></td><td>Single forward pass</td><td>Internal chain-of-thought scratchpad before answering</td></tr>
+          <tr><td><strong>Speed</strong></td><td>Fast</td><td>5–10× slower</td></tr>
+          <tr><td><strong>Cost</strong></td><td>Low</td><td>High (thinking tokens billed)</td></tr>
+          <tr><td><strong>Best for</strong></td><td>Drafting, summarizing, brainstorming, translation</td><td>Math, logic, complex analysis, code debugging</td></tr>
+        </tbody>
+      </table>
     </div>
 
-    <footer>
-        AI Fundamental Concepts &mdash; 2026 Edition &mdash; Generated with Claude
-    </footer>
+    <div class="callout danger">
+      <span class="icon">🚫</span>
+      <div><strong>Math Warning:</strong> ChatGPT, Claude, and Gemini in standard chat mode do NOT perform mathematical computation. Error rates on multi-digit multiplication exceed <strong>40%</strong>. Always use Code Execution mode for any math or data task.</div>
+    </div>
 
-</div>
+    <h3>Retrieval-Augmented Generation (RAG)</h3>
+    <p>RAG connects LLMs to private company data without fine-tuning:</p>
+    <ol>
+      <li><strong>Ingest</strong> documents → <strong>Embed</strong> into vectors → <strong>Store</strong> in vector database</li>
+      <li><strong>Query</strong> by embedding user question → <strong>Retrieve</strong> top-K similar chunks</li>
+      <li><strong>Generate</strong> answer grounded in retrieved context</li>
+    </ol>
+    <div class="callout success">
+      <span class="icon">✅</span>
+      <div><strong>RAG vs. Fine-Tuning:</strong> RAG is preferred for enterprise use — instant updates, source attribution, data stays on-premises, lower cost, and better hallucination control.</div>
+    </div>
+
+    <h3>Model Selection Decision Tree</h3>
+    <div class="decision-tree">
+      <div class="decision-step">
+        <span class="q">1</span>
+        <div>Math / counting / data? <span class="arrow">→</span> <strong>Code Execution</strong></div>
+      </div>
+      <div class="decision-step">
+        <span class="q">2</span>
+        <div>Complex multi-step logic? <span class="arrow">→</span> <strong>Reasoning model</strong></div>
+      </div>
+      <div class="decision-step">
+        <span class="q">3</span>
+        <div>Drafting / summarizing / brainstorming? <span class="arrow">→</span> <strong>Fast non-reasoning model</strong></div>
+      </div>
+      <div class="decision-step">
+        <span class="q">4</span>
+        <div>Needs company-specific knowledge? <span class="arrow">→</span> <strong>RAG or Custom Agent</strong></div>
+      </div>
+      <div class="decision-step">
+        <span class="q">5</span>
+        <div>Domain-specific (CRM, HR, BI)? <span class="arrow">→</span> <strong>Specialized tool</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── MODULE 4 ── -->
+  <section id="page-m4" class="page">
+    <div class="page-header">
+      <span class="module-badge m4">Module 4</span>
+      <h2>Prompt Engineering &amp; Context Design</h2>
+      <p class="subtitle">The RTCF framework and advanced prompting techniques.</p>
+    </div>
+
+    <h3>The RTCF Framework</h3>
+    <p>Every effective prompt needs four components:</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Component</th><th>Weak Example</th><th>Strong Example</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong>R — Role</strong></td>
+            <td>"Help me analyze this."</td>
+            <td>"You are a senior financial analyst with 15 years in Thai consumer finance..."</td>
+          </tr>
+          <tr>
+            <td><strong>T — Task</strong></td>
+            <td>"Tell me about Q3 performance."</td>
+            <td>"Identify the top 3 cost centers that exceeded budget by >10%. Calculate variance, root cause, and Q4 corrective action."</td>
+          </tr>
+          <tr>
+            <td><strong>C — Context</strong></td>
+            <td><em>(none)</em></td>
+            <td>"Audience is the board. 5-minute attention window. Revenue +12%, OPEX +18%..."</td>
+          </tr>
+          <tr>
+            <td><strong>F — Format</strong></td>
+            <td><em>(none)</em></td>
+            <td>"Output: (1) 3-sentence exec summary. (2) Table: Cost Center, Budget, Actual, Variance. (3) Bullet recommendations by department."</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Advanced Techniques</h3>
+    <ul>
+      <li><strong>Chain-of-Thought (CoT):</strong> "Think step-by-step" improves logic/math accuracy by <strong>20–40%</strong>.</li>
+      <li><strong>XML Scratchpad:</strong> <code>&lt;scratchpad&gt;</code> for reasoning, <code>&lt;answer&gt;</code> for final output.</li>
+      <li><strong>Few-Shot Examples:</strong> Provide 2–3 input/output pairs before your actual request.</li>
+      <li><strong>Negative Prompting:</strong> "DO NOT use bullet points / add caveats / start with 'Certainly!'"</li>
+      <li><strong>Structured JSON Output:</strong> Use <code>response_format</code>, tool use, or <code>response_mime_type</code> to guarantee valid JSON for downstream systems.</li>
+    </ul>
+
+    <h3>Context Hierarchy (Priority Order)</h3>
+    <ol>
+      <li><strong>System prompt</strong> (highest)</li>
+      <li><strong>Uploaded documents</strong> (high)</li>
+      <li><strong>Conversation history</strong> (medium)</li>
+      <li><strong>Current user message</strong> (variable)</li>
+      <li><strong>Training data</strong> (lowest — where hallucinations originate)</li>
+    </ol>
+
+    <h3>Anti-Patterns to Avoid</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Anti-Pattern</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td><strong>Wall of Text</strong></td><td>Pasting 20 pages with "summarize this"</td></tr>
+          <tr><td><strong>Assumption of Knowledge</strong></td><td>"What about the Smith account?" — model has no idea</td></tr>
+          <tr><td><strong>Moving Target</strong></td><td>Changing requirements without restating full context</td></tr>
+          <tr><td><strong>Premature Delegation</strong></td><td>"Should we approve this loan?" — model lacks your data</td></tr>
+          <tr><td><strong>Format Neglect</strong></td><td>Not specifying output format upfront</td></tr>
+          <tr><td><strong>Complexity Bomb</strong></td><td>15 sub-tasks packed into one prompt</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ── MODULE 5 ── -->
+  <section id="page-m5" class="page">
+    <div class="page-header">
+      <span class="module-badge m5">Module 5</span>
+      <h2>Production Workflows</h2>
+      <p class="subtitle">Ready-to-use prompt templates for common business tasks.</p>
+    </div>
+
+    <h3>Email Transformer</h3>
+    <p>Model: Any non-reasoning model. Temperature: 0.4</p>
+    <pre><code>Role: Senior program manager writing to cross-functional stakeholders.
+Task: Transform these rough notes into a professional [email type].
+Constraints:
+- Tone: [constructive / formal / casual]
+- Structure: Situation > Impact > Solution > Specific Ask
+- Length: under 200 words
+- Audience: [team / VP / client / all-staff]
+My rough notes: [paste here]</code></pre>
+
+    <h3>Contract Deviation Analysis</h3>
+    <pre><code>Compare this vendor contract against our standard terms (attached).
+Output table: Clause | Our Standard | Vendor Version | Risk Level | Action
+Focus: liability caps, indemnification, IP, termination, SLA, data handling.</code></pre>
+
+    <h3>Meeting Intelligence Pipeline</h3>
+    <pre><code>Extract every commitment, decision, and action item from this transcript.
+Per item: Owner | Task | Deadline | Dependencies | Status
+Flag unresolved disagreements. Output as JSON.</code></pre>
+
+    <h3>Data Processing</h3>
+    <div class="callout danger">
+      <span class="icon">🚫</span>
+      <div><strong>Always use Code Execution mode for data tasks.</strong> Never ask the chat interface to "think about" numbers.</div>
+    </div>
+    <pre><code>Upload: [CSV file]
+Write a Python/pandas script to:
+1. Standardize address fields
+2. Normalize dates to YYYY-MM-DD
+3. Remove exact duplicates on [key column]
+4. Flag fuzzy duplicates (>85% similarity)
+5. Validate email and phone formats
+6. Export clean CSV + change summary</code></pre>
+  </section>
+
+  <!-- ── MODULE 6 ── -->
+  <section id="page-m6" class="page">
+    <div class="page-header">
+      <span class="module-badge m6">Module 6</span>
+      <h2>Data Security, Privacy &amp; Ethics</h2>
+      <p class="subtitle">Protecting company data, PDPA compliance, and accountability.</p>
+    </div>
+
+    <h3>Enterprise vs. Consumer AI</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Feature</th><th>Consumer (Free/Plus)</th><th>Enterprise / API</th></tr></thead>
+        <tbody>
+          <tr><td>Data used for training?</td><td style="color:#dc2626;font-weight:600">Yes (default)</td><td style="color:#16a34a;font-weight:600">No — contractually guaranteed</td></tr>
+          <tr><td>Data retention</td><td>30 days to indefinite</td><td>Zero retention option</td></tr>
+          <tr><td>PDPA/GDPR compliant</td><td>Unclear</td><td>DPA signed; data residency options</td></tr>
+          <tr><td>Audit trail</td><td>No</td><td>Full logging, SSO</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout danger">
+      <span class="icon">🚫</span>
+      <div><strong>ZERO TOLERANCE:</strong> Using a personal ChatGPT/Claude/Gemini account for company work is strictly forbidden. Your confidential data could be used to train the next model and surface in competitor queries.</div>
+    </div>
+
+    <h3>Data Classification Framework</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Level</th><th>Definition</th><th>AI Policy</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><strong style="color:#16a34a">PUBLIC</strong></td>
+            <td>Press releases, job postings, public filings</td>
+            <td>Safe with any tool</td>
+          </tr>
+          <tr>
+            <td><strong style="color:#2563eb">INTERNAL</strong></td>
+            <td>Meeting notes, process docs, org charts</td>
+            <td>Enterprise tools only</td>
+          </tr>
+          <tr>
+            <td><strong style="color:#d97706">CONFIDENTIAL</strong></td>
+            <td>Financials, customer lists, salary data, contracts</td>
+            <td>Explicit IT/DPO approval required</td>
+          </tr>
+          <tr>
+            <td><strong style="color:#dc2626">RESTRICTED</strong></td>
+            <td>Trade secrets, credentials, health records, board minutes, PII</td>
+            <td style="color:#dc2626;font-weight:600">NEVER share with any AI system</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>The Retraining Risk</h3>
+    <p>Pasting confidential data into a consumer AI → data enters training pipeline → future model may reproduce or reveal that information to anyone who asks a related question.</p>
+
+    <h4>Documented Incidents</h4>
+    <ul>
+      <li><strong>Samsung (2023):</strong> Engineers pasted proprietary source code into personal ChatGPT accounts.</li>
+      <li><strong>Mata v. Avianca (2023):</strong> Lawyer submitted AI-fabricated legal citations; fined by court.</li>
+      <li><strong>Italy (2023):</strong> ChatGPT temporarily banned by data protection authority over GDPR concerns.</li>
+    </ul>
+
+    <h3>Thailand PDPA Implications</h3>
+    <ul>
+      <li><strong>Section 24:</strong> Personal data requires a valid legal basis to process.</li>
+      <li><strong>Section 27:</strong> Consent must be explicit and specific — prior consent for loan processing does NOT cover AI tool processing.</li>
+      <li><strong>Sections 77–90:</strong> Fines up to <strong>5 million baht per violation</strong>; criminal liability possible.</li>
+    </ul>
+
+    <div class="callout warning">
+      <span class="icon">⚖️</span>
+      <div><strong>Accountability Standard:</strong> You are legally and professionally responsible for every output you send or publish. <em>"The AI wrote it"</em> is not a defense.</div>
+    </div>
+
+    <h3>Pre-Send Checklist</h3>
+    <ul class="checklist">
+      <li>Verified every fact, figure, citation independently</li>
+      <li>Reviewed for gendered/biased language</li>
+      <li>No confidential or restricted data revealed</li>
+      <li>Matches company tone and brand standards</li>
+      <li>No legal liability from claims that turn out to be wrong</li>
+    </ul>
+  </section>
+
+  <!-- ── QUICK REFERENCE ── -->
+  <section id="page-ref" class="page">
+    <div class="page-header">
+      <span class="module-badge ref">Quick Reference</span>
+      <h2>Quick Reference Guide</h2>
+      <p class="subtitle">Model selection and data classification at a glance.</p>
+    </div>
+
+    <h3>Model Selection Guide</h3>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Need</th><th>Use</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Quick drafting, email, brainstorming</td>
+            <td><strong>GPT-5.4 / Claude Sonnet 4.6 / Gemini 3.1 Pro</strong></td>
+            <td>Fast, cheap, great language tasks</td>
+          </tr>
+          <tr>
+            <td>Complex analysis, logic, math reasoning</td>
+            <td><strong>o3 / o4-mini / DeepSeek R1</strong></td>
+            <td>Deliberate thinking with self-checking</td>
+          </tr>
+          <tr>
+            <td>Data crunching, charts, statistics</td>
+            <td><strong>Code Execution (any platform)</strong></td>
+            <td>Writes &amp; runs actual code; 100% accurate math</td>
+          </tr>
+          <tr>
+            <td>100+ page documents</td>
+            <td><strong>Gemini 3.1 Pro (1M context) or chunked RAG</strong></td>
+            <td>Largest context window</td>
+          </tr>
+          <tr>
+            <td>Company-specific Q&amp;A</td>
+            <td><strong>RAG pipeline or Custom Agent/GPT</strong></td>
+            <td>Grounded in your actual documents</td>
+          </tr>
+          <tr>
+            <td>High-volume, cost-sensitive</td>
+            <td><strong>GPT-5 mini / Claude Haiku / Gemini Flash 2.0</strong></td>
+            <td>Lowest cost with acceptable quality</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Data Classification Quick Test</h3>
+    <div class="decision-tree">
+      <div class="decision-step">
+        <span class="q" style="background:#16a34a">1</span>
+        <div>"Would this matter if it appeared on the front page of a newspaper?" <span class="arrow">→</span> If <strong>no</strong>: probably <strong style="color:#16a34a">Public</strong>.</div>
+      </div>
+      <div class="decision-step">
+        <span class="q" style="background:#2563eb">2</span>
+        <div>"Does it contain names, numbers, or specifics about employees, customers, or strategy?" <span class="arrow">→</span> If <strong>no</strong>: probably <strong style="color:#2563eb">Internal</strong>.</div>
+      </div>
+      <div class="decision-step">
+        <span class="q" style="background:#dc2626">3</span>
+        <div>"Could disclosure cause financial loss, legal action, or regulatory penalty?" <span class="arrow">→</span> If <strong>yes</strong>: <strong style="color:#dc2626">Confidential or Restricted</strong>. Consult IT/DPO before any AI use.</div>
+      </div>
+    </div>
+
+    <h3>The Five Non-Negotiable Rules</h3>
+    <ul class="rules-list">
+      <li><span class="rule-num">1</span><div><strong>Never trust AI output without independent verification.</strong> Hallucinations are inherent, not bugs.</div></li>
+      <li><span class="rule-num">2</span><div><strong>Never use personal AI accounts for company data.</strong> Consumer AI may train on your inputs.</div></li>
+      <li><span class="rule-num">3</span><div><strong>Classify data before every AI interaction.</strong> Public → anywhere. Internal → enterprise only. Confidential/Restricted → strict protocols.</div></li>
+      <li><span class="rule-num">4</span><div><strong>Match the tool to the task.</strong> Chat for drafting. Code Execution for math. Reasoning models for logic. Specialized tools for domain tasks.</div></li>
+      <li><span class="rule-num">5</span><div><strong>You own the output.</strong> You are the final quality gate. AI is the tool; you are the intelligence.</div></li>
+    </ul>
+
+    <div class="callout info" style="margin-top:40px">
+      <span class="icon">📄</span>
+      <div>This document covers all 6 modules and appendices of the AI Literacy Manual — Ngernturbo Public Company Limited, March 2026. <strong>Internal Use Only.</strong></div>
+    </div>
+  </section>
+
+</main>
 
 <script>
-const questions = [
-    // === TOKENS & CONTEXT ===
-    {
-        category: "Tokens & Context",
-        q: "What is a token in the context of LLMs?",
-        options: [
-            "A security key for API access",
-            "The smallest unit of text an LLM processes",
-            "A type of neural network layer",
-            "A measurement of model accuracy"
-        ],
-        answer: 1,
-        explanation: "Tokens are the smallest units of text that LLMs read and generate. A token is roughly 3/4 of a word in English."
-    },
-    {
-        category: "Tokens & Context",
-        q: "Roughly how many tokens make up one English word?",
-        options: [
-            "Exactly 1 token = 1 word",
-            "1 word ≈ 1.3 tokens (4/3)",
-            "1 word ≈ 3 tokens",
-            "1 word ≈ 10 tokens"
-        ],
-        answer: 1,
-        explanation: "On average, 1 English word ≈ 1.3 tokens (or equivalently, 1 token ≈ 3/4 of a word)."
-    },
-    {
-        category: "Tokens & Context",
-        q: "What is a context window?",
-        options: [
-            "The screen where you type prompts",
-            "The maximum number of tokens a model can process in one conversation",
-            "The training dataset size",
-            "The number of GPUs used for inference"
-        ],
-        answer: 1,
-        explanation: "The context window is the maximum number of tokens (input + output) a model can handle in a single conversation."
-    },
-    {
-        category: "Tokens & Context",
-        q: "What happens when your input exceeds the context window?",
-        options: [
-            "The model automatically summarizes older content",
-            "The model processes it in chunks automatically",
-            "The request will fail or earlier content gets truncated",
-            "The model runs slower but still processes everything"
-        ],
-        answer: 2,
-        explanation: "When input exceeds the context window, it typically gets truncated (earlier content is lost) or the API returns an error."
-    },
-    {
-        category: "Tokens & Context",
-        q: "What is the 'lost in the middle' problem?",
-        options: [
-            "Models forget their system prompt",
-            "Models perform worse on information placed in the middle of long contexts",
-            "Tokens get corrupted during transfer",
-            "Models can't process even-numbered tokens"
-        ],
-        answer: 1,
-        explanation: "Research shows models pay more attention to the beginning and end of long contexts, sometimes missing details in the middle."
-    },
+  function showPage(id, link) {
+    // hide all pages
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    // deactivate all nav links
+    document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+    // show target page
+    document.getElementById('page-' + id).classList.add('active');
+    // activate nav link
+    if (link) link.classList.add('active');
+    // scroll to top
+    window.scrollTo(0, 0);
+    return false;
+  }
 
-    // === TEMPERATURE & TOP-P ===
-    {
-        category: "Temperature & Sampling",
-        q: "What does temperature=0 mean?",
-        options: [
-            "The model is turned off",
-            "The model gives the most random output possible",
-            "The model always picks the highest-probability token (deterministic)",
-            "The model only outputs numbers"
-        ],
-        answer: 2,
-        explanation: "Temperature=0 makes the model deterministic — it always selects the most probable next token, giving consistent and predictable output."
-    },
-    {
-        category: "Temperature & Sampling",
-        q: "Which temperature is best for writing creative fiction?",
-        options: [
-            "0.0",
-            "0.1",
-            "0.8 – 1.0",
-            "5.0"
-        ],
-        answer: 2,
-        explanation: "Higher temperatures (0.8–1.0) produce more creative and diverse outputs, ideal for brainstorming and storytelling."
-    },
-    {
-        category: "Temperature & Sampling",
-        q: "What does top_p=0.9 mean?",
-        options: [
-            "Use 90% of the model's parameters",
-            "Only consider tokens whose cumulative probability adds up to 90%",
-            "The model is 90% confident",
-            "Output 90% of the maximum tokens"
-        ],
-        answer: 1,
-        explanation: "Top-p (nucleus sampling) with p=0.9 means the model only considers the smallest set of tokens whose probabilities sum to 90%, filtering out unlikely tokens."
-    },
-    {
-        category: "Temperature & Sampling",
-        q: "For generating accurate code, which temperature should you use?",
-        options: [
-            "1.0 for maximum creativity",
-            "0 – 0.2 for accuracy",
-            "0.5 for balance",
-            "Temperature doesn't affect code"
-        ],
-        answer: 1,
-        explanation: "Low temperature (0–0.2) ensures the model picks the most likely correct tokens, which is crucial for code generation."
-    },
-    {
-        category: "Temperature & Sampling",
-        q: "What does frequency_penalty do?",
-        options: [
-            "Limits how often you can call the API",
-            "Reduces the repetition of tokens already used in the output",
-            "Controls how fast the model generates",
-            "Penalizes long prompts"
-        ],
-        answer: 1,
-        explanation: "Frequency penalty reduces the likelihood of the model repeating tokens it has already generated, making output more varied."
-    },
+  function showPageByName(id) {
+    const link = [...document.querySelectorAll('nav a')].find(a =>
+      a.getAttribute('onclick') && a.getAttribute('onclick').includes("'" + id + "'")
+    );
+    showPage(id, link);
+    return false;
+  }
 
-    // === PROMPTING TECHNIQUES ===
-    {
-        category: "Prompting Techniques",
-        q: "What is zero-shot prompting?",
-        options: [
-            "Asking the model with no examples provided",
-            "Giving the model zero seconds to respond",
-            "A prompt that always fails",
-            "Using the model without any training"
-        ],
-        answer: 0,
-        explanation: "Zero-shot means asking the model to perform a task without providing any examples — it relies purely on its pre-trained knowledge."
-    },
-    {
-        category: "Prompting Techniques",
-        q: "How many examples are typically used in few-shot prompting?",
-        options: [
-            "0",
-            "1",
-            "2 – 5",
-            "100+"
-        ],
-        answer: 2,
-        explanation: "Few-shot typically uses 2–5 examples to demonstrate the desired pattern before the actual task."
-    },
-    {
-        category: "Prompting Techniques",
-        q: "What phrase commonly triggers Chain-of-Thought reasoning?",
-        options: [
-            "\"Answer immediately\"",
-            "\"Be creative\"",
-            "\"Let's think step by step\"",
-            "\"Give me the shortest answer\""
-        ],
-        answer: 2,
-        explanation: "Adding 'Let's think step by step' encourages the model to break down its reasoning process before giving a final answer."
-    },
-    {
-        category: "Prompting Techniques",
-        q: "When should you use Chain-of-Thought instead of zero-shot?",
-        options: [
-            "For simple classification tasks",
-            "For math, logic, and multi-step reasoning problems",
-            "When you want shorter responses",
-            "When you want to save tokens"
-        ],
-        answer: 1,
-        explanation: "Chain-of-Thought dramatically improves performance on complex reasoning tasks like math, logic puzzles, and multi-step problems."
-    },
-    {
-        category: "Prompting Techniques",
-        q: "What is the downside of using more few-shot examples?",
-        options: [
-            "It makes the model dumber",
-            "It uses more tokens (higher cost and fills context window)",
-            "It breaks the model",
-            "It has no downside"
-        ],
-        answer: 1,
-        explanation: "Each example takes up tokens in the context window. More examples = more tokens consumed = higher cost and less room for the actual task."
-    },
-
-    // === PARAMETERS ===
-    {
-        category: "Key Parameters",
-        q: "What does max_tokens control?",
-        options: [
-            "The maximum input length",
-            "The maximum number of tokens the model will generate in its response",
-            "The model's memory size",
-            "The number of API calls allowed"
-        ],
-        answer: 1,
-        explanation: "max_tokens sets the upper limit on how many tokens the model will generate in its response."
-    },
-    {
-        category: "Key Parameters",
-        q: "What is a system prompt?",
-        options: [
-            "The first user message",
-            "Hidden instructions that set the model's behavior and persona",
-            "An error message from the system",
-            "The model's source code"
-        ],
-        answer: 1,
-        explanation: "A system prompt is a set of hidden instructions given to the model that defines its behavior, role, and constraints for the conversation."
-    },
-    {
-        category: "Key Parameters",
-        q: "What do stop_sequences do?",
-        options: [
-            "Stop the model from starting",
-            "Define tokens/strings that tell the model to stop generating",
-            "Prevent the model from using certain words",
-            "Pause the model for a set time"
-        ],
-        answer: 1,
-        explanation: "Stop sequences are specific tokens or strings that, when generated, signal the model to stop producing further output."
-    },
-
-    // === MULTIMODAL ===
-    {
-        category: "Multimodal AI",
-        q: "How does a multimodal AI 'see' an image?",
-        options: [
-            "It reads the filename",
-            "It splits the image into patches and converts each to a numerical vector",
-            "It converts the image to text using OCR only",
-            "It can't actually see images"
-        ],
-        answer: 1,
-        explanation: "A vision encoder splits images into small patches, then converts each patch into a numerical vector (embedding) that the model can process."
-    },
-    {
-        category: "Multimodal AI",
-        q: "What does the projection layer do in multimodal models?",
-        options: [
-            "Displays the image on screen",
-            "Maps image embeddings into the same vector space as text embeddings",
-            "Compresses the image to save storage",
-            "Translates text to another language"
-        ],
-        answer: 1,
-        explanation: "The projection layer maps image embeddings into the same space as text token embeddings, allowing the LLM to process both together."
-    },
-    {
-        category: "Multimodal AI",
-        q: "How does AI process video?",
-        options: [
-            "It watches the video in real-time",
-            "It samples key frames, encodes each, and feeds frame tokens to the LLM",
-            "It only reads the video title",
-            "It converts video to audio first"
-        ],
-        answer: 1,
-        explanation: "Video is processed by sampling key frames at intervals, encoding each frame into tokens, then feeding all frame tokens to the LLM as a sequence."
-    },
-    {
-        category: "Multimodal AI",
-        q: "What is CLIP?",
-        options: [
-            "A video editing tool",
-            "A model trained to match images with text descriptions",
-            "A compression algorithm",
-            "A programming language"
-        ],
-        answer: 1,
-        explanation: "CLIP (by OpenAI) was trained on millions of image-text pairs to learn the relationship between visual content and language."
-    },
-    {
-        category: "Multimodal AI",
-        q: "Why is multimodal AI possible?",
-        options: [
-            "Because images are secretly text files",
-            "Because all data types can be represented as sequences of numerical vectors",
-            "Because GPUs can display images",
-            "Because of faster internet speeds"
-        ],
-        answer: 1,
-        explanation: "The key insight is that images, text, audio, and video can all be represented as sequences of numerical vectors, allowing a Transformer to process them uniformly."
-    },
-
-    // === EFFICIENCY ===
-    {
-        category: "Using AI Efficiently",
-        q: "What does the 'C' in the CRAFT prompting framework stand for?",
-        options: [
-            "Code",
-            "Context",
-            "Creative",
-            "Chain"
-        ],
-        answer: 1,
-        explanation: "CRAFT = Context, Role, Action, Format, Tone. Context means providing background information about your situation."
-    },
-    {
-        category: "Using AI Efficiently",
-        q: "What is the best approach when AI gives you an imperfect answer?",
-        options: [
-            "Start a completely new conversation",
-            "Switch to a different AI model",
-            "Iterate and refine your prompt to improve the answer",
-            "Accept the answer as-is"
-        ],
-        answer: 2,
-        explanation: "Iterating on your prompt is more efficient than starting over. Refine by adding constraints, examples, or corrections."
-    },
-    {
-        category: "Using AI Efficiently",
-        q: "Which model tier should you use for simple classification tasks?",
-        options: [
-            "Opus (most expensive, most capable)",
-            "Sonnet (mid-tier)",
-            "Haiku (fast, cheap)",
-            "It doesn't matter"
-        ],
-        answer: 2,
-        explanation: "For simple tasks like classification, extraction, or formatting, a smaller/cheaper model like Haiku is sufficient and much more cost-effective."
-    },
-    {
-        category: "Using AI Efficiently",
-        q: "What is 'hallucination' in AI?",
-        options: [
-            "When the AI crashes",
-            "When the AI generates confident but incorrect information",
-            "When the AI refuses to answer",
-            "When the AI generates images"
-        ],
-        answer: 1,
-        explanation: "Hallucination is when an AI produces plausible-sounding but factually incorrect information with high confidence."
-    },
-    {
-        category: "Using AI Efficiently",
-        q: "What should you always do with AI-generated code?",
-        options: [
-            "Deploy it directly to production",
-            "Trust it if it looks correct",
-            "Run it and write tests to verify it works",
-            "Only use it for documentation"
-        ],
-        answer: 2,
-        explanation: "Always run and test AI-generated code. Just because it looks correct or compiles doesn't mean it's bug-free."
-    },
-    {
-        category: "Using AI Efficiently",
-        q: "Why should you break complex tasks into smaller steps for AI?",
-        options: [
-            "Because AI can only process 10 words at a time",
-            "Because smaller tasks get better, more focused results",
-            "Because it's cheaper per token",
-            "Because AI can't understand long text"
-        ],
-        answer: 1,
-        explanation: "Breaking complex tasks into steps allows the AI to focus on each part, producing higher quality results than trying to do everything at once."
-    },
-    {
-        category: "Using AI Efficiently",
-        q: "What is prompt caching used for?",
-        options: [
-            "Saving prompts to a text file",
-            "Reusing repeated system prompts to save cost and latency",
-            "Caching model weights on disk",
-            "Storing conversation history in a database"
-        ],
-        answer: 1,
-        explanation: "Prompt caching allows repeated parts of prompts (like system instructions) to be cached, reducing token processing cost and response latency."
-    },
-];
-
-let answered = {};
-
-function renderQuiz() {
-    const container = document.getElementById('quiz-container');
-    let currentCategory = '';
-    let html = '';
-
-    questions.forEach((q, i) => {
-        if (q.category !== currentCategory) {
-            currentCategory = q.category;
-            html += `<h3 style="margin-top:2rem;">${currentCategory}</h3>`;
-        }
-        html += `
-        <div class="quiz-question" id="q${i}" style="
-            background:#0f172a; border:1px solid #334155; border-radius:10px;
-            padding:1.2rem 1.5rem; margin:1rem 0;
-        ">
-            <p style="margin-bottom:0.8rem;">
-                <strong style="color:#38bdf8;">Q${i+1}.</strong> ${q.q}
-            </p>
-            <div class="quiz-options">
-                ${q.options.map((opt, j) => `
-                    <div class="quiz-opt" id="q${i}o${j}" onclick="checkAnswer(${i}, ${j})" style="
-                        padding:0.6rem 1rem; margin:0.4rem 0; border-radius:8px;
-                        border:1px solid #334155; cursor:pointer;
-                        transition: all 0.2s;
-                    " onmouseover="if(!answered[${i}]) this.style.borderColor='#475569'"
-                       onmouseout="if(!answered[${i}]) this.style.borderColor='#334155'">
-                        <span style="color:#818cf8; font-weight:600; margin-right:0.5rem;">
-                            ${'ABCD'[j]}.
-                        </span>${opt}
-                    </div>
-                `).join('')}
-            </div>
-            <div id="exp${i}" style="display:none; margin-top:0.8rem; padding:0.8rem 1rem;
-                border-radius:8px; font-size:0.9rem;"></div>
-        </div>`;
+  // make overview module-cards clickable
+  document.querySelectorAll('.module-card').forEach(card => {
+    card.addEventListener('click', e => {
+      e.preventDefault();
     });
-
-    container.innerHTML = html;
-}
-
-function checkAnswer(qi, oi) {
-    if (answered[qi] !== undefined) return;
-    answered[qi] = oi;
-
-    const correct = questions[qi].answer;
-    const isCorrect = oi === correct;
-
-    // Highlight selected
-    const selected = document.getElementById(`q${qi}o${oi}`);
-    selected.style.background = isCorrect ? 'rgba(74,222,128,0.15)' : 'rgba(248,113,113,0.15)';
-    selected.style.borderColor = isCorrect ? '#4ade80' : '#f87171';
-
-    // If wrong, also highlight the correct one
-    if (!isCorrect) {
-        const correctEl = document.getElementById(`q${qi}o${correct}`);
-        correctEl.style.background = 'rgba(74,222,128,0.15)';
-        correctEl.style.borderColor = '#4ade80';
-    }
-
-    // Disable hover on all options
-    const qDiv = document.getElementById(`q${qi}`);
-    qDiv.querySelectorAll('.quiz-opt').forEach(el => {
-        el.style.cursor = 'default';
-    });
-
-    // Show explanation
-    const exp = document.getElementById(`exp${qi}`);
-    exp.style.display = 'block';
-    exp.style.background = isCorrect ? 'rgba(74,222,128,0.08)' : 'rgba(248,113,113,0.08)';
-    exp.style.borderLeft = `4px solid ${isCorrect ? '#4ade80' : '#f87171'}`;
-    exp.innerHTML = `<strong style="color:${isCorrect ? '#4ade80' : '#f87171'}">
-        ${isCorrect ? 'Correct!' : 'Incorrect.'}</strong> ${questions[qi].explanation}`;
-
-    updateScore();
-}
-
-function updateScore() {
-    const total = Object.keys(answered).length;
-    const correct = Object.values(answered).filter((v, i) =>
-        v === questions[Object.keys(answered)[Object.values(answered).indexOf(v)]]?.answer
-    ).length;
-
-    // Recount properly
-    let c = 0;
-    for (const [qi, oi] of Object.entries(answered)) {
-        if (oi === questions[parseInt(qi)].answer) c++;
-    }
-
-    document.getElementById('score-correct').textContent = c;
-    const pct = total > 0 ? Math.round((c / total) * 100) : 0;
-    const pctEl = document.getElementById('score-pct');
-    pctEl.textContent = `${c}/${total} answered — ${pct}%`;
-    pctEl.style.color = pct >= 80 ? '#4ade80' : pct >= 50 ? '#fbbf24' : '#f87171';
-}
-
-function resetQuiz() {
-    answered = {};
-    document.getElementById('score-correct').textContent = '0';
-    document.getElementById('score-pct').textContent = '0%';
-    document.getElementById('score-pct').style.color = '#94a3b8';
-    renderQuiz();
-}
-
-renderQuiz();
+  });
 </script>
-
 </body>
 </html>
