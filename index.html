@@ -2,1237 +2,1176 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <title>AI Literacy Manual — Ngernturbo 2026</title>
   <style>
     :root {
-      --bg: #f7f8fc;
-      --surface: #ffffff;
-      --border: #e2e6ef;
-      --accent: #2563eb;
-      --accent-light: #eff6ff;
-      --accent-dark: #1d4ed8;
-      --text: #1e2535;
+      --primary: #1a56db;
+      --primary-dark: #1342a8;
+      --accent: #f97316;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #1e293b;
       --muted: #64748b;
-      --danger: #dc2626;
-      --danger-bg: #fef2f2;
-      --warning: #d97706;
-      --warning-bg: #fffbeb;
-      --success: #16a34a;
-      --success-bg: #f0fdf4;
-      --code-bg: #1e2535;
-      --code-text: #e2e8f0;
-      --nav-width: 260px;
-      --radius: 10px;
+      --border: #e2e8f0;
+      --warn: #fef3c7;
+      --warn-border: #f59e0b;
+      --danger: #fee2e2;
+      --danger-border: #ef4444;
+      --success: #d1fae5;
+      --success-border: #10b981;
+      --nav-h: 64px;
+      --radius: 12px;
     }
-
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
+    html { scroll-behavior: smooth; }
     body {
-      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       background: var(--bg);
       color: var(--text);
-      line-height: 1.7;
-      display: flex;
+      font-size: 16px;
+      line-height: 1.6;
+      padding-bottom: calc(var(--nav-h) + 16px);
     }
 
-    /* ── SIDEBAR ── */
-    #sidebar {
-      position: fixed;
-      top: 0; left: 0;
-      width: var(--nav-width);
-      height: 100vh;
-      background: var(--surface);
-      border-right: 1px solid var(--border);
-      display: flex;
-      flex-direction: column;
-      overflow-y: auto;
-      z-index: 100;
-    }
-
-    .sidebar-header {
-      padding: 24px 20px 18px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .sidebar-header .org {
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 4px;
-    }
-
-    .sidebar-header h1 {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--text);
-      line-height: 1.35;
-    }
-
-    .sidebar-header .meta {
-      margin-top: 8px;
-      font-size: 11px;
-      color: var(--muted);
-    }
-
-    nav { padding: 12px 0; flex: 1; }
-
-    nav a {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 9px 20px;
-      text-decoration: none;
-      color: var(--muted);
-      font-size: 13px;
-      font-weight: 500;
-      border-left: 3px solid transparent;
-      transition: all .15s;
-    }
-
-    nav a:hover {
-      background: var(--accent-light);
-      color: var(--accent);
-    }
-
-    nav a.active {
-      background: var(--accent-light);
-      color: var(--accent-dark);
-      border-left-color: var(--accent);
-      font-weight: 600;
-    }
-
-    nav a .num {
-      min-width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: var(--border);
-      color: var(--muted);
-      font-size: 11px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    nav a.active .num {
-      background: var(--accent);
+    /* ── Top Header ── */
+    .top-header {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
       color: #fff;
+      padding: 20px 16px 16px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,.18);
     }
+    .top-header .org { font-size: 11px; letter-spacing: .08em; opacity: .8; text-transform: uppercase; margin-bottom: 4px; }
+    .top-header h1 { font-size: 19px; font-weight: 700; line-height: 1.3; }
+    .top-header .sub { font-size: 12px; opacity: .7; margin-top: 3px; }
 
-    nav .nav-group-label {
-      padding: 16px 20px 4px;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: var(--border);
-    }
-
-    /* ── MAIN ── */
-    main {
-      margin-left: var(--nav-width);
-      flex: 1;
-      padding: 0;
-    }
-
-    /* ── PAGE SECTIONS ── */
-    .page {
-      display: none;
-      min-height: 100vh;
-      padding: 48px 52px 80px;
-      max-width: 900px;
-    }
-
+    /* ── Section visibility ── */
+    .page { display: none; }
     .page.active { display: block; }
 
-    /* ── PAGE HEADER ── */
-    .page-header {
-      margin-bottom: 40px;
-      padding-bottom: 24px;
-      border-bottom: 2px solid var(--border);
-    }
+    /* ── Content wrapper ── */
+    .content { padding: 12px 14px; max-width: 600px; margin: 0 auto; }
 
-    .module-badge {
-      display: inline-block;
-      padding: 3px 10px;
-      border-radius: 20px;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      background: var(--accent);
-      color: #fff;
-      margin-bottom: 10px;
-    }
-
-    .module-badge.overview { background: #7c3aed; }
-    .module-badge.m1 { background: #2563eb; }
-    .module-badge.m2 { background: #dc2626; }
-    .module-badge.m3 { background: #d97706; }
-    .module-badge.m4 { background: #16a34a; }
-    .module-badge.m5 { background: #0891b2; }
-    .module-badge.m6 { background: #7c3aed; }
-    .module-badge.ref { background: #475569; }
-
-    .page-header h2 {
-      font-size: 28px;
-      font-weight: 800;
-      color: var(--text);
-      line-height: 1.25;
-    }
-
-    .page-header p.subtitle {
-      margin-top: 8px;
-      font-size: 15px;
-      color: var(--muted);
-    }
-
-    /* ── TYPOGRAPHY ── */
-    h3 {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--text);
-      margin: 36px 0 12px;
-      padding-bottom: 6px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    h4 {
-      font-size: 15px;
-      font-weight: 700;
-      color: var(--text);
-      margin: 24px 0 8px;
-    }
-
-    p { margin-bottom: 14px; font-size: 15px; }
-
-    ul, ol {
-      padding-left: 22px;
+    /* ── Cards ── */
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      border: 1px solid var(--border);
       margin-bottom: 14px;
+      overflow: hidden;
+      box-shadow: 0 1px 4px rgba(0,0,0,.06);
     }
+    .card-header {
+      background: var(--primary);
+      color: #fff;
+      padding: 12px 14px;
+      font-weight: 700;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      user-select: none;
+    }
+    .card-header .icon { font-size: 18px; flex-shrink: 0; }
+    .card-header .chevron { margin-left: auto; font-size: 12px; transition: transform .25s; }
+    .card-header.open .chevron { transform: rotate(180deg); }
+    .card-header.mod2 { background: #7c3aed; }
+    .card-header.mod3 { background: #0891b2; }
+    .card-header.mod4 { background: #059669; }
+    .card-header.mod5 { background: #d97706; }
+    .card-header.mod6 { background: #dc2626; }
+    .card-header.rules { background: #111827; }
+    .card-body { padding: 14px; display: none; }
+    .card-body.open { display: block; }
 
-    li { font-size: 15px; margin-bottom: 5px; }
-
+    /* ── Typography ── */
+    h2 { font-size: 15px; font-weight: 700; color: var(--primary-dark); margin: 16px 0 6px; }
+    h3 { font-size: 14px; font-weight: 600; color: var(--text); margin: 12px 0 4px; }
+    p { font-size: 14px; color: #334155; margin-bottom: 8px; }
+    ul, ol { padding-left: 18px; margin-bottom: 8px; }
+    li { font-size: 14px; color: #334155; margin-bottom: 4px; }
     strong { color: var(--text); }
 
-    /* ── CALLOUTS ── */
+    /* ── Callout boxes ── */
     .callout {
-      border-radius: var(--radius);
-      padding: 16px 20px;
-      margin: 20px 0;
-      font-size: 14px;
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-    }
-
-    .callout .icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
-
-    .callout.info {
-      background: var(--accent-light);
-      border-left: 4px solid var(--accent);
-      color: #1d4ed8;
-    }
-
-    .callout.warning {
-      background: var(--warning-bg);
-      border-left: 4px solid var(--warning);
-      color: #92400e;
-    }
-
-    .callout.danger {
-      background: var(--danger-bg);
-      border-left: 4px solid var(--danger);
-      color: #991b1b;
-    }
-
-    .callout.success {
-      background: var(--success-bg);
-      border-left: 4px solid var(--success);
-      color: #14532d;
-    }
-
-    /* ── TABLES ── */
-    .table-wrap { overflow-x: auto; margin: 20px 0; border-radius: var(--radius); box-shadow: 0 1px 4px rgba(0,0,0,.07); }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 14px;
-      background: var(--surface);
-    }
-
-    thead tr { background: var(--text); color: #fff; }
-
-    thead th {
-      padding: 12px 16px;
-      text-align: left;
-      font-weight: 600;
-      font-size: 12px;
-      letter-spacing: .04em;
-      text-transform: uppercase;
-    }
-
-    tbody tr { border-bottom: 1px solid var(--border); }
-    tbody tr:last-child { border-bottom: none; }
-    tbody tr:nth-child(even) { background: #f8fafc; }
-    tbody tr:hover { background: var(--accent-light); }
-
-    td { padding: 11px 16px; vertical-align: top; line-height: 1.5; }
-
-    td strong { color: var(--accent-dark); }
-
-    /* ── CODE ── */
-    pre {
-      background: var(--code-bg);
-      color: var(--code-text);
-      border-radius: var(--radius);
-      padding: 20px 22px;
-      margin: 20px 0;
-      overflow-x: auto;
-      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin: 10px 0;
       font-size: 13px;
-      line-height: 1.65;
+      line-height: 1.5;
     }
+    .callout-info { background: #eff6ff; border-left: 4px solid var(--primary); }
+    .callout-warn { background: var(--warn); border-left: 4px solid var(--warn-border); }
+    .callout-danger { background: var(--danger); border-left: 4px solid var(--danger-border); }
+    .callout-success { background: var(--success); border-left: 4px solid var(--success-border); }
+    .callout strong { display: block; margin-bottom: 2px; }
 
-    code {
-      font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
-      font-size: 12.5px;
-      background: #eef2ff;
-      color: #3730a3;
-      padding: 2px 6px;
-      border-radius: 4px;
+    /* ── Tags / badges ── */
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .04em;
+      margin-right: 4px;
+      margin-bottom: 4px;
     }
+    .badge-blue { background: #dbeafe; color: #1d4ed8; }
+    .badge-green { background: #d1fae5; color: #065f46; }
+    .badge-red { background: #fee2e2; color: #991b1b; }
+    .badge-yellow { background: #fef3c7; color: #92400e; }
+    .badge-purple { background: #ede9fe; color: #5b21b6; }
 
-    pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
+    /* ── Table ── */
+    .tbl-wrap { overflow-x: auto; margin: 8px 0; }
+    table { border-collapse: collapse; width: 100%; font-size: 12px; }
+    th { background: #f1f5f9; font-weight: 600; color: var(--text); padding: 7px 8px; text-align: left; border: 1px solid var(--border); }
+    td { padding: 6px 8px; border: 1px solid var(--border); color: #334155; vertical-align: top; }
+    tr:nth-child(even) td { background: #f8fafc; }
 
-    /* ── CARDS ── */
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-      gap: 16px;
-      margin: 20px 0;
-    }
-
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
+    /* ── Home hero ── */
+    .hero {
+      background: linear-gradient(160deg, #1e3a8a 0%, #1a56db 60%, #0ea5e9 100%);
       border-radius: var(--radius);
-      padding: 18px 20px;
-      transition: box-shadow .15s;
+      color: #fff;
+      padding: 22px 18px;
+      margin-bottom: 14px;
+    }
+    .hero .tagline { font-size: 12px; opacity: .75; letter-spacing: .1em; text-transform: uppercase; margin-bottom: 6px; }
+    .hero h2 { color: #fff; font-size: 20px; margin: 0 0 6px; }
+    .hero p { color: rgba(255,255,255,.85); font-size: 13px; margin: 0; }
+
+    .module-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+    .mod-btn {
+      border-radius: var(--radius);
+      padding: 14px 10px;
+      cursor: pointer;
+      border: none;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      text-align: left;
+      line-height: 1.4;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .mod-btn .mod-icon { font-size: 22px; }
+    .mod-btn.m1 { background: var(--primary); }
+    .mod-btn.m2 { background: #7c3aed; }
+    .mod-btn.m3 { background: #0891b2; }
+    .mod-btn.m4 { background: #059669; }
+    .mod-btn.m5 { background: #d97706; }
+    .mod-btn.m6 { background: #dc2626; }
+
+    .meta-row { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+    .meta-chip {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 10px;
+      font-size: 12px;
+      color: var(--muted);
+      flex: 1 1 calc(50% - 4px);
+    }
+    .meta-chip strong { display: block; color: var(--text); font-size: 13px; }
+
+    /* ── Code blocks ── */
+    code {
+      background: #f1f5f9;
+      border-radius: 4px;
+      padding: 1px 5px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      color: #1e293b;
+    }
+    pre {
+      background: #1e293b;
+      color: #e2e8f0;
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 12px;
+      overflow-x: auto;
+      margin: 8px 0;
+      line-height: 1.6;
     }
 
-    .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,.09); }
-
-    .card .card-num {
-      font-size: 28px;
-      font-weight: 800;
-      color: var(--accent);
-      line-height: 1;
+    /* ── Section rule block ── */
+    .rule-item {
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 12px;
+      margin-bottom: 8px;
+      background: #fff;
+    }
+    .rule-item .rule-num {
+      font-size: 11px;
+      font-weight: 700;
+      color: #fff;
+      background: #111827;
+      border-radius: 999px;
+      padding: 2px 8px;
+      display: inline-block;
       margin-bottom: 6px;
     }
 
-    .card h4 { margin: 0 0 6px; font-size: 14px; }
-    .card p { font-size: 13px; color: var(--muted); margin: 0; }
-
-    /* ── RULES LIST ── */
-    .rules-list { list-style: none; padding: 0; }
-
-    .rules-list li {
-      display: flex;
-      gap: 14px;
-      align-items: flex-start;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 16px 20px;
-      margin-bottom: 12px;
-      font-size: 15px;
-    }
-
-    .rules-list li .rule-num {
-      min-width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      background: var(--accent);
-      color: #fff;
-      font-size: 13px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
-
-    /* ── CHECKLIST ── */
-    .checklist { list-style: none; padding: 0; }
-
-    .checklist li {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      padding: 7px 0;
-      font-size: 14px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .checklist li:last-child { border-bottom: none; }
-
-    .checklist li::before {
-      content: "☐";
-      font-size: 16px;
-      color: var(--accent);
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
-
-    /* ── COVER PAGE ── */
-    .cover-hero {
-      background: linear-gradient(135deg, #1e2535 0%, #2563eb 100%);
-      color: #fff;
-      border-radius: 16px;
-      padding: 52px 48px;
-      margin-bottom: 40px;
-    }
-
-    .cover-hero .tag {
-      display: inline-block;
-      background: rgba(255,255,255,.15);
-      border: 1px solid rgba(255,255,255,.25);
-      color: #fff;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      padding: 4px 12px;
-      border-radius: 20px;
-      margin-bottom: 18px;
-    }
-
-    .cover-hero h2 {
-      font-size: 34px;
-      font-weight: 800;
-      line-height: 1.2;
-      margin-bottom: 14px;
-    }
-
-    .cover-hero p {
-      font-size: 15px;
-      opacity: .8;
-      margin-bottom: 0;
-    }
-
-    .cover-meta {
-      display: flex;
-      gap: 28px;
-      flex-wrap: wrap;
-      margin-top: 28px;
-      padding-top: 24px;
-      border-top: 1px solid rgba(255,255,255,.2);
-    }
-
-    .cover-meta div { font-size: 13px; opacity: .9; }
-    .cover-meta .label { font-size: 10px; opacity: .6; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 2px; }
-
-    .module-cards {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      gap: 14px;
-      margin-top: 8px;
-    }
-
-    .module-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 18px 20px;
-      cursor: pointer;
-      transition: all .15s;
-      text-decoration: none;
-      color: var(--text);
-      display: block;
-    }
-
-    .module-card:hover {
-      border-color: var(--accent);
-      box-shadow: 0 4px 20px rgba(37,99,235,.12);
-      transform: translateY(-2px);
-    }
-
-    .module-card .badge {
-      display: inline-block;
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      padding: 2px 8px;
-      border-radius: 12px;
-      margin-bottom: 10px;
-    }
-
-    .module-card h3 {
-      font-size: 14px;
-      font-weight: 700;
-      border: none;
-      margin: 0 0 6px;
-      padding: 0;
-    }
-
-    .module-card p { font-size: 12px; color: var(--muted); margin: 0; }
-
-    /* ── DECISION TREE ── */
-    .decision-tree { margin: 20px 0; }
-
-    .decision-step {
-      display: flex;
-      align-items: flex-start;
-      gap: 14px;
-      padding: 12px 16px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      margin-bottom: 8px;
-      font-size: 14px;
-    }
-
-    .decision-step .q {
-      min-width: 24px;
-      height: 24px;
-      background: var(--warning);
-      color: #fff;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 11px;
-      font-weight: 700;
-      flex-shrink: 0;
-    }
-
-    .decision-step .arrow { color: var(--accent); font-weight: 700; }
-
-    /* ── HAMBURGER BUTTON ── */
-    #menu-toggle {
-      display: none;
+    /* ── Bottom nav ── */
+    .bottom-nav {
       position: fixed;
-      top: 12px; left: 12px;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: var(--nav-h);
+      background: #fff;
+      border-top: 1px solid var(--border);
+      display: flex;
       z-index: 200;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      width: 40px; height: 40px;
+      box-shadow: 0 -2px 12px rgba(0,0,0,.08);
+    }
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
+      gap: 2px;
       cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0,0,0,.1);
-      flex-direction: column;
-      gap: 5px;
-      padding: 10px;
+      background: none;
+      border: none;
+      padding: 0;
+      color: var(--muted);
+      font-size: 10px;
+      font-weight: 500;
+      transition: color .2s;
+    }
+    .nav-item .ni { font-size: 20px; line-height: 1; }
+    .nav-item.active { color: var(--primary); }
+    .nav-item.active .nav-dot {
+      width: 4px; height: 4px; background: var(--primary);
+      border-radius: 999px; margin-top: 2px;
     }
 
-    #menu-toggle span {
-      display: block;
-      width: 18px; height: 2px;
-      background: var(--text);
-      border-radius: 2px;
-      transition: all .2s;
-    }
-
-    /* ── OVERLAY ── */
-    #sidebar-overlay {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.4);
-      z-index: 99;
-    }
-
-    #sidebar-overlay.visible { display: block; }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 768px) {
-      #sidebar {
-        transform: translateX(-100%);
-        transition: transform .25s ease;
-      }
-
-      #sidebar.open { transform: translateX(0); }
-
-      #menu-toggle { display: flex; }
-
-      main {
-        margin-left: 0;
-        padding-top: 60px;
-      }
-
-      .page { padding: 24px 16px 60px; }
-
-      .cover-hero { padding: 32px 24px; }
-      .cover-hero h2 { font-size: 24px; }
-
-      .page-header h2 { font-size: 22px; }
-
-      .module-cards { grid-template-columns: 1fr; }
-      .card-grid { grid-template-columns: 1fr; }
-    }
-
-    /* ── SCROLLBAR ── */
-    #sidebar::-webkit-scrollbar { width: 4px; }
-    #sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    /* ── Divider ── */
+    hr { border: none; border-top: 1px solid var(--border); margin: 14px 0; }
   </style>
 </head>
 <body>
 
-<!-- ════════════════ MOBILE CONTROLS ════════════════ -->
-<button id="menu-toggle" onclick="toggleSidebar()" aria-label="Toggle menu">
-  <span></span><span></span><span></span>
-</button>
-<div id="sidebar-overlay" onclick="closeSidebar()"></div>
+<!-- ── TOP HEADER ── -->
+<div class="top-header">
+  <div class="org">Ngernturbo Public Company Limited</div>
+  <h1>AI Literacy for the Modern Workplace</h1>
+  <div class="sub">Working Smarter, Not Harder &nbsp;·&nbsp; March 2026</div>
+</div>
 
-<!-- ════════════════ SIDEBAR ════════════════ -->
-<aside id="sidebar">
-  <div class="sidebar-header">
-    <div class="org">Ngernturbo (SET: TURBO)</div>
-    <h1>AI Literacy Manual 2026</h1>
-    <div class="meta">By Sutach Ruangsuttipap · March 2026</div>
+<!-- ════════════════════════════════════════ HOME PAGE ════════════════════════════════════════ -->
+<div id="page-home" class="page active">
+  <div class="content">
+
+    <div class="hero">
+      <div class="tagline">Comprehensive Reference Manual</div>
+      <h2>AI Literacy Manual 2026</h2>
+      <p>Internal Training Document &mdash; For All Departments: HR, Admin, Marketing, Operations, Customer Service, Finance, Engineering, and Management.</p>
+    </div>
+
+    <div class="meta-row">
+      <div class="meta-chip"><strong>Sutach Ruangsuttipap</strong>Author</div>
+      <div class="meta-chip"><strong>SET: TURBO</strong>Ngernturbo PCL</div>
+      <div class="meta-chip"><strong>March 2026</strong>Date</div>
+      <div class="meta-chip"><strong>Internal Use Only</strong>Classification</div>
+    </div>
+
+    <div class="card" style="margin-bottom:14px">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span class="icon">📖</span> Introduction: Why This Manual Exists
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <p>Artificial intelligence tools have moved from the technology department to every desk in the organization. Marketing teams draft campaigns with ChatGPT, HR professionals screen resumes with AI-powered tools, and finance teams summarize reports in seconds.</p>
+        <p>The problem is not that people are using AI. The problem is that most people are using AI <strong>poorly, dangerously, or both</strong>. They paste confidential salary data into personal ChatGPT accounts. They trust fabricated citations in legal briefs. They submit AI-generated reports without verifying a single number.</p>
+        <p>This manual exists to close that gap — a comprehensive self-study reference for AI literacy in the modern workplace.</p>
+        <h2>What You Will Learn</h2>
+        <ul>
+          <li><strong>Module 1:</strong> AI Under the Hood — LLMs, neural networks, tokenization, context windows</li>
+          <li><strong>Module 2:</strong> Failure Modes — hallucinations, attention degradation, bias</li>
+          <li><strong>Module 3:</strong> Model Selection — reasoning vs non-reasoning, RAG, agents</li>
+          <li><strong>Module 4:</strong> Prompt Engineering — RTCF framework, advanced techniques</li>
+          <li><strong>Module 5:</strong> Production Workflows — ready-to-use templates</li>
+          <li><strong>Module 6:</strong> Data Security, Privacy &amp; Ethics — PDPA, GDPR, governance</li>
+        </ul>
+      </div>
+    </div>
+
+    <p style="font-size:13px;color:var(--muted);margin-bottom:10px;font-weight:600">TAP A MODULE TO EXPLORE</p>
+    <div class="module-grid">
+      <button class="mod-btn m1" onclick="goPage('page-m1')"><span class="mod-icon">🧠</span>Module 1<br>AI Under the Hood</button>
+      <button class="mod-btn m2" onclick="goPage('page-m2')"><span class="mod-icon">⚠️</span>Module 2<br>Failure Modes</button>
+      <button class="mod-btn m3" onclick="goPage('page-m3')"><span class="mod-icon">🗂️</span>Module 3<br>Model Selection</button>
+      <button class="mod-btn m4" onclick="goPage('page-m4')"><span class="mod-icon">✍️</span>Module 4<br>Prompt Engineering</button>
+      <button class="mod-btn m5" onclick="goPage('page-m5')"><span class="mod-icon">⚙️</span>Module 5<br>Production Workflows</button>
+      <button class="mod-btn m6" onclick="goPage('page-m6')"><span class="mod-icon">🔒</span>Module 6<br>Security &amp; Ethics</button>
+    </div>
+
+    <div class="card">
+      <div class="card-header rules" onclick="toggleCard(this)">
+        <span class="icon">🏆</span> The 5 Non-Negotiable Rules
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="rule-item"><span class="rule-num">Rule 1</span><strong>Never trust AI output without independent verification.</strong> Hallucinations are inherent — not occasional bugs. Verify every fact, figure, and citation.</div>
+        <div class="rule-item"><span class="rule-num">Rule 2</span><strong>Never use personal AI accounts for company data.</strong> Consumer AI providers may use your inputs to train future models. Always use company-approved enterprise accounts.</div>
+        <div class="rule-item"><span class="rule-num">Rule 3</span><strong>Classify data before every AI interaction.</strong> Public data can go anywhere. Internal data goes to enterprise tools only. Confidential and Restricted data must not be shared with AI.</div>
+        <div class="rule-item"><span class="rule-num">Rule 4</span><strong>Match the tool to the task.</strong> Use chat for drafting. Use code execution for math &amp; data. Use reasoning models for complex logic. Never use chat to do arithmetic.</div>
+        <div class="rule-item"><span class="rule-num">Rule 5</span><strong>You own the output.</strong> "The AI wrote it" is not a legal or professional defense. If you send it, forward it, or publish it — it is your responsibility.</div>
+      </div>
+    </div>
+
   </div>
+</div>
 
-  <nav>
-    <div class="nav-group-label">Contents</div>
-    <a href="#" class="active" onclick="showPage('overview', this)">
-      <span class="num">0</span> Overview
-    </a>
-    <a href="#" onclick="showPage('m1', this)">
-      <span class="num">1</span> AI Under the Hood
-    </a>
-    <a href="#" onclick="showPage('m2', this)">
-      <span class="num">2</span> Failure Modes
-    </a>
-    <a href="#" onclick="showPage('m3', this)">
-      <span class="num">3</span> Model Selection
-    </a>
-    <a href="#" onclick="showPage('m4', this)">
-      <span class="num">4</span> Prompt Engineering
-    </a>
-    <a href="#" onclick="showPage('m5', this)">
-      <span class="num">5</span> Production Workflows
-    </a>
-    <a href="#" onclick="showPage('m6', this)">
-      <span class="num">6</span> Data Security &amp; Ethics
-    </a>
-    <a href="#" onclick="showPage('ref', this)">
-      <span class="num">★</span> Quick Reference
-    </a>
-  </nav>
-</aside>
+<!-- ════════════════════════════════════════ MODULE 1 ════════════════════════════════════════ -->
+<div id="page-m1" class="page">
+  <div class="content">
 
-<!-- ════════════════ MAIN ════════════════ -->
-<main>
-
-  <!-- ── OVERVIEW ── -->
-  <section id="page-overview" class="page active">
-    <div class="cover-hero">
-      <div class="tag">Internal Use Only</div>
-      <h2>AI Literacy for the<br>Modern Workplace</h2>
-      <p>A comprehensive AI literacy reference for all departments — HR, Admin, Marketing, Operations, Customer Service, Finance, Engineering, and Management.</p>
-      <div class="cover-meta">
-        <div><div class="label">Organization</div>Ngernturbo Public Company Limited</div>
-        <div><div class="label">Author</div>Sutach Ruangsuttipap</div>
-        <div><div class="label">Date</div>March 2026</div>
-        <div><div class="label">Modules</div>6 Modules + Reference</div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span class="icon">🧠</span> 1.1 What Is a Large Language Model?
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <p>A Large Language Model is a <strong>neural network trained on vast quantities of text to predict the next token in a sequence.</strong> When you type a prompt, the model predicts the most statistically likely continuation — it does not "understand" your question.</p>
+        <div class="callout callout-info">
+          <strong>Core Insight</strong>
+          An LLM is a next-token prediction engine. It predicts what text is most likely to follow your input based on patterns in training data. This single insight explains most AI behavior, both impressive and disappointing.
+        </div>
+        <p>An LLM does <strong>not</strong> think, reason, understand, or know anything in the way humans use those words. It performs sophisticated pattern matching against statistical regularities learned from its training corpus.</p>
       </div>
     </div>
 
-    <h3>About This Manual</h3>
-    <p>This manual closes the gap between using AI and using it <strong>well, safely, and responsibly</strong>. It covers how AI models work, where they fail, how to choose the right model, and how to protect company data — with practical templates ready to use today.</p>
-
-    <h3>Modules at a Glance</h3>
-    <div class="module-cards">
-      <a class="module-card" href="#" onclick="showPageByName('m1')">
-        <span class="badge" style="background:#eff6ff;color:#2563eb">Module 1</span>
-        <h3>AI Under the Hood</h3>
-        <p>How LLMs work, tokenization, context windows, and pricing.</p>
-      </a>
-      <a class="module-card" href="#" onclick="showPageByName('m2')">
-        <span class="badge" style="background:#fef2f2;color:#dc2626">Module 2</span>
-        <h3>Failure Modes</h3>
-        <p>Hallucinations, attention degradation, bias, and risk tiers.</p>
-      </a>
-      <a class="module-card" href="#" onclick="showPageByName('m3')">
-        <span class="badge" style="background:#fffbeb;color:#d97706">Module 3</span>
-        <h3>Model Selection</h3>
-        <p>Reasoning vs. non-reasoning models, RAG, decision framework.</p>
-      </a>
-      <a class="module-card" href="#" onclick="showPageByName('m4')">
-        <span class="badge" style="background:#f0fdf4;color:#16a34a">Module 4</span>
-        <h3>Prompt Engineering</h3>
-        <p>RTCF framework, advanced techniques, anti-patterns.</p>
-      </a>
-      <a class="module-card" href="#" onclick="showPageByName('m5')">
-        <span class="badge" style="background:#ecfeff;color:#0891b2">Module 5</span>
-        <h3>Production Workflows</h3>
-        <p>Ready-to-use templates for email, contracts, meetings, data.</p>
-      </a>
-      <a class="module-card" href="#" onclick="showPageByName('m6')">
-        <span class="badge" style="background:#f5f3ff;color:#7c3aed">Module 6</span>
-        <h3>Security &amp; Ethics</h3>
-        <p>Data classification, PDPA, accountability, and zero-tolerance rules.</p>
-      </a>
-    </div>
-
-    <h3>The Five Non-Negotiable Rules</h3>
-    <ul class="rules-list">
-      <li><span class="rule-num">1</span><div><strong>Never trust AI output without independent verification.</strong> Hallucinations are inherent, not bugs.</div></li>
-      <li><span class="rule-num">2</span><div><strong>Never use personal AI accounts for company data.</strong> Consumer AI may train on your inputs.</div></li>
-      <li><span class="rule-num">3</span><div><strong>Classify data before every AI interaction.</strong> Public → anywhere. Internal → enterprise only. Confidential/Restricted → strict protocols.</div></li>
-      <li><span class="rule-num">4</span><div><strong>Match the tool to the task.</strong> Chat for drafting. Code Execution for math. Reasoning models for logic. Specialized tools for domain tasks.</div></li>
-      <li><span class="rule-num">5</span><div><strong>You own the output.</strong> You are the final quality gate. AI is the tool; you are the intelligence.</div></li>
-    </ul>
-  </section>
-
-  <!-- ── MODULE 1 ── -->
-  <section id="page-m1" class="page">
-    <div class="page-header">
-      <span class="module-badge m1">Module 1</span>
-      <h2>AI Under the Hood</h2>
-      <p class="subtitle">How LLMs actually work — architecture, tokenization, context, and pricing.</p>
-    </div>
-
-    <h3>What an LLM Actually Is</h3>
-    <p>A Large Language Model (LLM) is a neural network that <strong>predicts the next token</strong> in a sequence. It does not think, reason, or understand — it performs sophisticated statistical pattern matching on training data. Output sounds intelligent because the training data was produced by intelligent humans, not because the model itself understands.</p>
-    <div class="callout info">
-      <span class="icon">💡</span>
-      <div><strong>Core insight:</strong> LLMs are next-token prediction engines. They sound confident even when completely wrong.</div>
-    </div>
-
-    <h3>Architecture (Transformer)</h3>
-    <ul>
-      <li><strong>Embedding Layer:</strong> Converts tokens to dense vectors (~12,288 dimensions for GPT-4). Adds positional encoding so word order is preserved.</li>
-      <li><strong>Transformer Blocks:</strong> ~96 stacked layers, each refining token representations via self-attention.</li>
-      <li><strong>Self-Attention:</strong> Each token computes Query (Q), Key (K), Value (V) vectors.<br><code>Attention(Q,K,V) = softmax(Q·Kᵀ / √dₖ) · V</code></li>
-      <li><strong>Multi-Head Attention:</strong> GPT-4 uses 128 attention heads per layer, each learning different relationship types.</li>
-      <li><strong>Output Layer:</strong> Softmax converts raw scores into a probability distribution over ~100,000 vocabulary tokens.</li>
-    </ul>
-
-    <h3>Tokenization</h3>
-    <p>LLMs read <strong>tokens</strong>, not words (using Byte Pair Encoding). Key implications:</p>
-    <ul>
-      <li>Non-English text (Thai, Chinese, Japanese) uses <strong>2–4× more tokens</strong> than English equivalents.</li>
-      <li>Numbers tokenize unpredictably — this is why LLMs <strong>cannot do arithmetic</strong> natively.</li>
-      <li>~1 token ≈ 0.75 English words. A 50-page PDF ≈ 75,000 tokens.</li>
-    </ul>
-
-    <h3>API Pricing Reference (2026)</h3>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr><th>Model</th><th>Input / 1M tokens</th><th>Output / 1M tokens</th><th>Context</th></tr>
-        </thead>
-        <tbody>
-          <tr><td>GPT-5.4</td><td>$2.50</td><td>$15.00</td><td>1M</td></tr>
-          <tr><td>Claude Opus 4.6</td><td>$15.00</td><td>$75.00</td><td>1M</td></tr>
-          <tr><td>Claude Sonnet 4.6</td><td>$3.00</td><td>$15.00</td><td>1M</td></tr>
-          <tr><td>Claude Haiku 4.5</td><td>$0.80</td><td>$4.00</td><td>200K</td></tr>
-          <tr><td>Gemini 3.1 Pro</td><td>$2.00</td><td>$12.00</td><td>1M</td></tr>
-          <tr><td>Gemini Flash 2.0</td><td>$0.10</td><td>$0.40</td><td>1M</td></tr>
-          <tr><td>o3 (reasoning)</td><td>$10.00</td><td>$40.00</td><td>200K</td></tr>
-          <tr><td>DeepSeek R1</td><td>$0.55</td><td>$2.19</td><td>128K</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <h3>Context Windows</h3>
-    <p>The context window is the model's working memory. Beyond the limit, older content is silently dropped — <strong>without warning</strong>. Performance also degrades as the window fills; recall accuracy can drop <strong>20–40%</strong> near the limit.</p>
-
-    <h3>Decoding Parameters</h3>
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr><th>Temperature</th><th>Behavior</th><th>Best For</th></tr>
-        </thead>
-        <tbody>
-          <tr><td><strong>0.0</strong></td><td>Deterministic</td><td>Fact extraction, code, data analysis</td></tr>
-          <tr><td><strong>0.3–0.5</strong></td><td>Slightly varied</td><td>Business writing, summarization</td></tr>
-          <tr><td><strong>0.7–1.0</strong></td><td>Creative</td><td>Marketing copy, brainstorming</td></tr>
-          <tr><td><strong>1.5+</strong></td><td>Highly random</td><td>Experimental only</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- ── MODULE 2 ── -->
-  <section id="page-m2" class="page">
-    <div class="page-header">
-      <span class="module-badge m2">Module 2</span>
-      <h2>Failure Modes</h2>
-      <p class="subtitle">Where AI breaks down — and how to protect against it.</p>
-    </div>
-
-    <h3>Attention Degradation — "Lost in the Middle"</h3>
-    <p>Recall accuracy follows a <strong>U-shaped curve</strong> — high at the start and end of a document, dropping dramatically in the middle.</p>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Position in Document</th><th>Recall Accuracy</th></tr></thead>
-        <tbody>
-          <tr><td>First 10%</td><td>90%+</td></tr>
-          <tr><td>40–60% (middle)</td><td style="color:#dc2626;font-weight:700">45–55% — DANGER ZONE</td></tr>
-          <tr><td>Last 10%</td><td>85%+</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="callout warning">
-      <span class="icon">⚠️</span>
-      <div><strong>Mitigations:</strong> Put critical instructions at the start AND end; chunk long documents; use explicit section markers; repeat key constraints at the end.</div>
-    </div>
-
-    <h3>Four Types of Hallucination</h3>
-    <div class="card-grid">
-      <div class="card">
-        <div class="card-num">01</div>
-        <h4>Factual Fabrication</h4>
-        <p>Invented citations, nonexistent cases, fake statistics.<br><em>e.g., Mata v. Avianca 2023 — all 6 legal citations fabricated.</em></p>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span class="icon">⚙️</span> 1.2 Neural Network Architecture
+        <span class="chevron">▼</span>
       </div>
-      <div class="card">
-        <div class="card-num">02</div>
-        <h4>Confident Extrapolation</h4>
-        <p>Real knowledge applied outside its valid domain.<br><em>e.g., US tax law applied to Thai questions.</em></p>
-      </div>
-      <div class="card">
-        <div class="card-num">03</div>
-        <h4>Instruction Drift</h4>
-        <p>Long outputs gradually deviate from original instructions.</p>
-      </div>
-      <div class="card">
-        <div class="card-num">04</div>
-        <h4>Sycophantic Agreement</h4>
-        <p>Model agrees with incorrect user premises rather than correcting them.</p>
+      <div class="card-body">
+        <p>Modern LLMs are built on the <strong>Transformer architecture</strong> (Vaswani et al., 2017 — "Attention Is All You Need").</p>
+        <h3>Key Components</h3>
+        <ul>
+          <li><strong>Input Embedding Layer:</strong> Converts tokens to dense numerical vectors. Adds positional information so the model knows token order.</li>
+          <li><strong>Transformer Blocks:</strong> Stacked layers that refine each token's meaning by referencing all other tokens. Early layers learn syntax; deep layers learn abstract concepts.</li>
+          <li><strong>Self-Attention Mechanism:</strong> The core innovation. For each token, computes Query (what I need), Key (what I contain), and Value (my actual content) vectors.<br><code>Attention(Q,K,V) = softmax(Q·Kᵀ / √dₖ) · V</code></li>
+          <li><strong>Output Softmax:</strong> Converts the final representation into a probability distribution over ~100,000 vocabulary tokens.</li>
+        </ul>
+        <div class="callout callout-warn">
+          <strong>Practical implication of attention</strong>
+          Attention is a finite budget. Longer inputs mean less attention per token. Critical instructions buried in the middle of long documents receive the least attention.
+        </div>
       </div>
     </div>
 
-    <h3>Risk Classification Framework</h3>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Tier</th><th>Type</th><th>Examples</th><th>Guardrail</th></tr></thead>
-        <tbody>
-          <tr>
-            <td><strong style="color:#16a34a">1 — Low Risk</strong></td>
-            <td>AI generates, human scans</td>
-            <td>Brainstorming, drafts, internal notes</td>
-            <td>Minimal review</td>
-          </tr>
-          <tr>
-            <td><strong style="color:#d97706">2 — Medium Risk</strong></td>
-            <td>AI assists, human verifies</td>
-            <td>Policy summaries, customer comm drafts</td>
-            <td>Mandatory human review before distribution</td>
-          </tr>
-          <tr>
-            <td><strong style="color:#dc2626">3 — High Risk</strong></td>
-            <td>Human decides, AI may inform</td>
-            <td>Legal/financial decisions, hiring, regulatory submissions</td>
-            <td>AI informs only; human makes ALL final decisions</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <h3>Systematic Bias Sources</h3>
-    <ul>
-      <li><strong>Training data bias</strong> — Overrepresents English, Western, and historical demographic norms.</li>
-      <li><strong>Recency bias</strong> — Knowledge cutoff means outdated information may be stated confidently.</li>
-      <li><strong>Western/English bias</strong> — Measurably lower quality output in Thai and other non-Latin-script languages.</li>
-      <li><strong>Sycophancy bias</strong> — Tendency to validate user inputs, even incorrect ones.</li>
-    </ul>
-  </section>
-
-  <!-- ── MODULE 3 ── -->
-  <section id="page-m3" class="page">
-    <div class="page-header">
-      <span class="module-badge m3">Module 3</span>
-      <h2>Model Selection &amp; Architecture</h2>
-      <p class="subtitle">Choosing the right model for the right task.</p>
-    </div>
-
-    <h3>Reasoning vs. Non-Reasoning Models</h3>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th></th><th>Non-Reasoning (System 1)</th><th>Reasoning (System 2)</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Examples</strong></td><td>GPT-5 mini, Claude Haiku 4.5, Gemini Flash 2.0</td><td>o3, o4-mini, DeepSeek R1, Claude Opus/Sonnet extended thinking</td></tr>
-          <tr><td><strong>Mechanism</strong></td><td>Single forward pass</td><td>Internal chain-of-thought scratchpad before answering</td></tr>
-          <tr><td><strong>Speed</strong></td><td>Fast</td><td>5–10× slower</td></tr>
-          <tr><td><strong>Cost</strong></td><td>Low</td><td>High (thinking tokens billed)</td></tr>
-          <tr><td><strong>Best for</strong></td><td>Drafting, summarizing, brainstorming, translation</td><td>Math, logic, complex analysis, code debugging</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="callout danger">
-      <span class="icon">🚫</span>
-      <div><strong>Math Warning:</strong> ChatGPT, Claude, and Gemini in standard chat mode do NOT perform mathematical computation. Error rates on multi-digit multiplication exceed <strong>40%</strong>. Always use Code Execution mode for any math or data task.</div>
-    </div>
-
-    <h3>Retrieval-Augmented Generation (RAG)</h3>
-    <p>RAG connects LLMs to private company data without fine-tuning:</p>
-    <ol>
-      <li><strong>Ingest</strong> documents → <strong>Embed</strong> into vectors → <strong>Store</strong> in vector database</li>
-      <li><strong>Query</strong> by embedding user question → <strong>Retrieve</strong> top-K similar chunks</li>
-      <li><strong>Generate</strong> answer grounded in retrieved context</li>
-    </ol>
-    <div class="callout success">
-      <span class="icon">✅</span>
-      <div><strong>RAG vs. Fine-Tuning:</strong> RAG is preferred for enterprise use — instant updates, source attribution, data stays on-premises, lower cost, and better hallucination control.</div>
-    </div>
-
-    <h3>Model Selection Decision Tree</h3>
-    <div class="decision-tree">
-      <div class="decision-step">
-        <span class="q">1</span>
-        <div>Math / counting / data? <span class="arrow">→</span> <strong>Code Execution</strong></div>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span class="icon">🔤</span> 1.3 Tokenization
+        <span class="chevron">▼</span>
       </div>
-      <div class="decision-step">
-        <span class="q">2</span>
-        <div>Complex multi-step logic? <span class="arrow">→</span> <strong>Reasoning model</strong></div>
-      </div>
-      <div class="decision-step">
-        <span class="q">3</span>
-        <div>Drafting / summarizing / brainstorming? <span class="arrow">→</span> <strong>Fast non-reasoning model</strong></div>
-      </div>
-      <div class="decision-step">
-        <span class="q">4</span>
-        <div>Needs company-specific knowledge? <span class="arrow">→</span> <strong>RAG or Custom Agent</strong></div>
-      </div>
-      <div class="decision-step">
-        <span class="q">5</span>
-        <div>Domain-specific (CRM, HR, BI)? <span class="arrow">→</span> <strong>Specialized tool</strong></div>
+      <div class="card-body">
+        <p>LLMs don't read words — they read <strong>tokens</strong> (subword units). Most models use Byte Pair Encoding (BPE).</p>
+        <h3>Critical implications</h3>
+        <ul>
+          <li><strong>Non-English text is more expensive.</strong> Thai, Chinese, Japanese, Arabic require 2–4× more tokens per equivalent meaning vs English.</li>
+          <li><strong>Numbers tokenize unpredictably.</strong> "12345.67" may become 4 separate tokens — this is why LLMs cannot reliably do arithmetic.</li>
+          <li><strong>1 token ≈ 0.75 English words</strong> (rough rule of thumb).</li>
+        </ul>
+        <div class="callout callout-warn">
+          <strong>Cost Alert</strong>
+          A query to a reasoning model (e.g. o3) may generate 10,000–50,000 internal thinking tokens before responding — costing $0.50–$2.00 per query.
+        </div>
       </div>
     </div>
-  </section>
 
-  <!-- ── MODULE 4 ── -->
-  <section id="page-m4" class="page">
-    <div class="page-header">
-      <span class="module-badge m4">Module 4</span>
-      <h2>Prompt Engineering &amp; Context Design</h2>
-      <p class="subtitle">The RTCF framework and advanced prompting techniques.</p>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span class="icon">📐</span> 1.4 Embeddings &amp; Vector Space
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <p>Embeddings map tokens to dense vectors where <strong>semantic relationships become geometric relationships</strong>. Similar meanings cluster together in vector space.</p>
+        <h3>Practical Applications</h3>
+        <ul>
+          <li><strong>Semantic Search:</strong> Search by meaning, not just keywords. "Unhappy employee" finds "staff dissatisfaction".</li>
+          <li><strong>RAG (Retrieval-Augmented Generation):</strong> Embed your company documents; retrieve relevant chunks to ground AI responses in your private data.</li>
+          <li><strong>Document Clustering:</strong> Automatically group similar tickets, complaints, or documents.</li>
+          <li><strong>Anomaly Detection:</strong> Outlier embeddings often signal emerging issues in feedback or data.</li>
+        </ul>
+      </div>
     </div>
 
-    <h3>The RTCF Framework</h3>
-    <p>Every effective prompt needs four components:</p>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Component</th><th>Weak Example</th><th>Strong Example</th></tr></thead>
-        <tbody>
-          <tr>
-            <td><strong>R — Role</strong></td>
-            <td>"Help me analyze this."</td>
-            <td>"You are a senior financial analyst with 15 years in Thai consumer finance..."</td>
-          </tr>
-          <tr>
-            <td><strong>T — Task</strong></td>
-            <td>"Tell me about Q3 performance."</td>
-            <td>"Identify the top 3 cost centers that exceeded budget by >10%. Calculate variance, root cause, and Q4 corrective action."</td>
-          </tr>
-          <tr>
-            <td><strong>C — Context</strong></td>
-            <td><em>(none)</em></td>
-            <td>"Audience is the board. 5-minute attention window. Revenue +12%, OPEX +18%..."</td>
-          </tr>
-          <tr>
-            <td><strong>F — Format</strong></td>
-            <td><em>(none)</em></td>
-            <td>"Output: (1) 3-sentence exec summary. (2) Table: Cost Center, Budget, Actual, Variance. (3) Bullet recommendations by department."</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span class="icon">🪟</span> 1.5 Context Windows
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <p>The context window is the total tokens the model can process in one interaction — your input + the model's output combined.</p>
+        <div class="tbl-wrap">
+          <table>
+            <tr><th>Model</th><th>Context Window</th></tr>
+            <tr><td>GPT-3 (2020)</td><td>4,096 tokens</td></tr>
+            <tr><td>GPT-4 (2023)</td><td>128,000 tokens</td></tr>
+            <tr><td>Claude 3.5 (2024)</td><td>200,000 tokens</td></tr>
+            <tr><td>Gemini 1.5 Pro</td><td>1,000,000 tokens</td></tr>
+          </table>
+        </div>
+        <div class="callout callout-danger">
+          <strong>Warning</strong>
+          Bigger context ≠ better performance. At 100K+ tokens, recall accuracy can drop below 60% for information in the middle. When you exceed the limit, the model silently truncates — it will NOT warn you.
+        </div>
+      </div>
     </div>
 
-    <h3>Advanced Techniques</h3>
-    <ul>
-      <li><strong>Chain-of-Thought (CoT):</strong> "Think step-by-step" improves logic/math accuracy by <strong>20–40%</strong>.</li>
-      <li><strong>XML Scratchpad:</strong> <code>&lt;scratchpad&gt;</code> for reasoning, <code>&lt;answer&gt;</code> for final output.</li>
-      <li><strong>Few-Shot Examples:</strong> Provide 2–3 input/output pairs before your actual request.</li>
-      <li><strong>Negative Prompting:</strong> "DO NOT use bullet points / add caveats / start with 'Certainly!'"</li>
-      <li><strong>Structured JSON Output:</strong> Use <code>response_format</code>, tool use, or <code>response_mime_type</code> to guarantee valid JSON for downstream systems.</li>
-    </ul>
-
-    <h3>Context Hierarchy (Priority Order)</h3>
-    <ol>
-      <li><strong>System prompt</strong> (highest)</li>
-      <li><strong>Uploaded documents</strong> (high)</li>
-      <li><strong>Conversation history</strong> (medium)</li>
-      <li><strong>Current user message</strong> (variable)</li>
-      <li><strong>Training data</strong> (lowest — where hallucinations originate)</li>
-    </ol>
-
-    <h3>Anti-Patterns to Avoid</h3>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Anti-Pattern</th><th>Description</th></tr></thead>
-        <tbody>
-          <tr><td><strong>Wall of Text</strong></td><td>Pasting 20 pages with "summarize this"</td></tr>
-          <tr><td><strong>Assumption of Knowledge</strong></td><td>"What about the Smith account?" — model has no idea</td></tr>
-          <tr><td><strong>Moving Target</strong></td><td>Changing requirements without restating full context</td></tr>
-          <tr><td><strong>Premature Delegation</strong></td><td>"Should we approve this loan?" — model lacks your data</td></tr>
-          <tr><td><strong>Format Neglect</strong></td><td>Not specifying output format upfront</td></tr>
-          <tr><td><strong>Complexity Bomb</strong></td><td>15 sub-tasks packed into one prompt</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- ── MODULE 5 ── -->
-  <section id="page-m5" class="page">
-    <div class="page-header">
-      <span class="module-badge m5">Module 5</span>
-      <h2>Production Workflows</h2>
-      <p class="subtitle">Ready-to-use prompt templates for common business tasks.</p>
+    <div class="card">
+      <div class="card-header" onclick="toggleCard(this)">
+        <span class="icon">🎲</span> 1.6 Decoding Parameters
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <h3>Temperature</h3>
+        <p>Controls randomness. <code>0.0</code> = deterministic (always picks highest probability token). Higher values increase creativity but risk incoherence.</p>
+        <div class="tbl-wrap">
+          <table>
+            <tr><th>Task</th><th>Temperature</th></tr>
+            <tr><td>Factual Q&amp;A, data extraction</td><td>0.0 – 0.2</td></tr>
+            <tr><td>Professional writing, summaries</td><td>0.3 – 0.5</td></tr>
+            <tr><td>Creative writing, brainstorming</td><td>0.7 – 1.0</td></tr>
+          </table>
+        </div>
+        <h3>Top-P (Nucleus Sampling)</h3>
+        <p>Considers only tokens in the top P% of cumulative probability. <strong>Adjust temperature first</strong>; modify Top-P only for fine-grained tail control. Most users should leave Top-P at default.</p>
+      </div>
     </div>
 
-    <h3>Email Transformer</h3>
-    <p>Model: Any non-reasoning model. Temperature: 0.4</p>
-    <pre><code>Role: Senior program manager writing to cross-functional stakeholders.
-Task: Transform these rough notes into a professional [email type].
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════ MODULE 2 ════════════════════════════════════════ -->
+<div id="page-m2" class="page">
+  <div class="content">
+
+    <div class="callout callout-warn" style="margin-bottom:14px">
+      <strong>Why this matters</strong>
+      Understanding how AI fails is arguably more important than understanding how it succeeds. AI failure that goes undetected creates legal, financial, and reputational risk.
+    </div>
+
+    <div class="card">
+      <div class="card-header mod2" onclick="toggleCard(this)">
+        <span class="icon">📉</span> 2.1 Attention Degradation: "Lost in the Middle"
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <p>LLM recall accuracy follows a <strong>U-shaped curve</strong> by position in the input. Content at the beginning and end gets processed most accurately; content in the middle is often forgotten.</p>
+        <div class="tbl-wrap">
+          <table>
+            <tr><th>Position</th><th>Recall Rate</th></tr>
+            <tr><td>Start of context</td><td>~95%</td></tr>
+            <tr><td>Middle of context</td><td>~55%</td></tr>
+            <tr><td>End of context</td><td>~90%</td></tr>
+          </table>
+        </div>
+        <h3>Mitigations</h3>
+        <ul>
+          <li>Place critical instructions at the <strong>start and end</strong> of your prompt</li>
+          <li><strong>Chunk long documents</strong> into 5–10 page segments, process separately</li>
+          <li>Add <code>=== CRITICAL ===</code> markers around important sections</li>
+          <li>Repeat key instructions at the end: "REMEMBER: Your output must include X, Y, Z"</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header mod2" onclick="toggleCard(this)">
+        <span class="icon">👻</span> 2.2 Hallucinations: Complete Taxonomy
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <p>Hallucination = factually incorrect or fabricated output presented with full confidence.</p>
+
+        <h3>Type 1: Factual Fabrication</h3>
+        <p>The model invents specific facts: fake citations, nonexistent court cases, fabricated statistics, imaginary people. The most dangerous type — it sounds completely plausible.</p>
+        <div class="callout callout-danger"><strong>Detection:</strong> Never trust any citation, statistic, name, date, or specific claim without independent verification.</div>
+
+        <h3>Type 2: Confident Extrapolation</h3>
+        <p>The model extends real patterns beyond their valid domain — e.g., applying US tax law to Thai tax questions.</p>
+        <div class="callout callout-warn"><strong>Detection:</strong> Ask "What jurisdiction/context are you drawing from?" Force explicit reasoning basis.</div>
+
+        <h3>Type 3: Instruction Drift</h3>
+        <p>In long outputs, the model gradually deviates from its initial instructions. It starts correctly but progressively relaxes constraints.</p>
+        <div class="callout callout-warn"><strong>Detection:</strong> Break long tasks into segments. Re-inject format constraints at each new section.</div>
+
+        <h3>Type 4: Sycophantic Agreement</h3>
+        <p>The model agrees with your incorrect premises rather than correcting you. If you say "2+2=5, correct?" many models say "Yes!"</p>
+        <div class="callout callout-danger"><strong>Detection:</strong> Test with a known-wrong statement first. If it agrees, recalibrate your trust for that session.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header mod2" onclick="toggleCard(this)">
+        <span class="icon">🏷️</span> 2.3 Risk Classification Framework
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <p><strong>Before starting any AI task, ask: "What tier is this?"</strong></p>
+        <div class="tbl-wrap">
+          <table>
+            <tr><th>Tier</th><th>Description</th><th>Review Required</th></tr>
+            <tr><td><span class="badge badge-green">Tier 1 Low</span></td><td>Internal drafts, brainstorming, personal research</td><td>Spot-check</td></tr>
+            <tr><td><span class="badge badge-yellow">Tier 2 Medium</span></td><td>External communications, reports for review</td><td>Full human review before sending</td></tr>
+            <tr><td><span class="badge badge-red">Tier 3 High</span></td><td>Legal, financial, medical, HR decisions</td><td>Expert verification; AI assists only</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header mod2" onclick="toggleCard(this)">
+        <span class="icon">⚖️</span> 2.4 Systematic Bias
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <h3>Training Data Bias</h3>
+        <p>Models reflect historical imbalances — default to male pronouns for CEO, Western cultural norms, etc.</p>
+        <p><strong>Mitigation:</strong> Explicitly specify diversity requirements: "Use gender-neutral language throughout."</p>
+
+        <h3>Recency Bias</h3>
+        <p>All models have a knowledge cutoff. GPT-5.4 and Claude Opus 4.6 extend to early 2025; older models may only go to mid-2024.</p>
+        <p><strong>Mitigation:</strong> Always specify "as of [date]" for time-sensitive queries. Use models with web search for current info.</p>
+
+        <h3>Western/English Bias</h3>
+        <p>Thai, Japanese, Arabic outputs are measurably lower quality — less nuanced, more likely to apply inappropriate cultural frameworks.</p>
+        <p><strong>Mitigation:</strong> Test outputs in your target language. Provide cultural context explicitly. Gemini has stronger multilingual capabilities.</p>
+
+        <h3>Sycophancy Bias</h3>
+        <p>Models tend to agree with users even when the user is wrong — especially dangerous in decision-making contexts.</p>
+        <p><strong>Mitigation:</strong> Prompt explicitly: "Your job is to find flaws in my reasoning. Challenge every assumption."</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════ MODULE 3 ════════════════════════════════════════ -->
+<div id="page-m3" class="page">
+  <div class="content">
+
+    <div class="card">
+      <div class="card-header mod3" onclick="toggleCard(this)">
+        <span class="icon">🗺️</span> 3.1 The 2026 Model Landscape
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+          <table>
+            <tr><th>Model</th><th>Best For</th><th>Context</th></tr>
+            <tr><td>GPT-5.4 (OpenAI)</td><td>General writing, coding</td><td>128K</td></tr>
+            <tr><td>o3 / o4-mini (OpenAI)</td><td>Complex reasoning, math</td><td>200K</td></tr>
+            <tr><td>Claude Opus 4.6 (Anthropic)</td><td>Long docs, analysis</td><td>1M</td></tr>
+            <tr><td>Claude Sonnet 4.6</td><td>Balanced speed/quality</td><td>200K</td></tr>
+            <tr><td>Claude Haiku 4.5</td><td>Fast, low cost</td><td>200K</td></tr>
+            <tr><td>Gemini 3.1 Pro (Google)</td><td>Multilingual, multimodal</td><td>1M</td></tr>
+            <tr><td>Gemini Flash 2.0</td><td>Speed, cost efficiency</td><td>1M</td></tr>
+            <tr><td>DeepSeek R1</td><td>Open source reasoning</td><td>128K</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header mod3" onclick="toggleCard(this)">
+        <span class="icon">🧩</span> 3.2 Reasoning vs Non-Reasoning Models
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <h3>Non-Reasoning (System 1)</h3>
+        <p>Models like GPT-5 mini, Claude Haiku 4.5, Gemini Flash 2.0 process your prompt in a single forward pass. Fast and cost-effective. Excel at pattern matching, language generation, summarization.</p>
+        <div class="callout callout-info">Best for: email drafting, summarization, translation, classification, simple Q&amp;A</div>
+
+        <h3>Reasoning (System 2)</h3>
+        <p>Models like o3, o4-mini, DeepSeek R1, and extended-thinking modes of Claude Opus 4.6 and Gemini 3.1 Pro generate internal chain-of-thought before producing visible output. These hidden tokens still consume your budget.</p>
+        <div class="tbl-wrap">
+          <table>
+            <tr><th>Benchmark</th><th>Reasoning</th><th>Non-Reasoning</th></tr>
+            <tr><td>Competitive Math</td><td>96%</td><td>76%</td></tr>
+            <tr><td>PhD Science Q&amp;A</td><td>85%</td><td>62%</td></tr>
+            <tr><td>Complex Code Debug</td><td>91%</td><td>73%</td></tr>
+          </table>
+        </div>
+        <div class="callout callout-warn">For simple tasks (summarization, email drafting, formatting), reasoning models offer zero benefit — they are slower and more expensive for no improvement.</div>
+
+        <h3>When to Use Each</h3>
+        <ul>
+          <li><strong>Use reasoning models for:</strong> multi-step logic, math &amp; quantitative analysis, complex code debugging, legal/financial analysis, strategic decisions</li>
+          <li><strong>Use non-reasoning for:</strong> drafting, summarization, translation, data extraction, classification, creative writing</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header mod3" onclick="toggleCard(this)">
+        <span class="icon">🧮</span> 3.3 Deterministic vs Probabilistic Computation
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="callout callout-danger">
+          <strong>Critical Misunderstanding</strong>
+          ChatGPT, Claude, and Gemini in standard chat mode do NOT perform mathematical computation. They predict what math answers look like based on patterns.
+        </div>
+        <p>When you type "What is 1,847 × 293?" the model doesn't compute it — it generates tokens that look like a plausible answer. Multi-digit multiplication error rates can exceed 30%.</p>
+        <h3>LLMs also fail at:</h3>
+        <ul>
+          <li>Counting words or characters accurately</li>
+          <li>Computing statistics (mean, median, standard deviation)</li>
+          <li>Date arithmetic</li>
+          <li>Aggregating data across large tables</li>
+        </ul>
+        <div class="callout callout-success">
+          <strong>Correct approach:</strong> Use Code Execution mode. The AI writes a Python script, executes it in a sandbox, and returns the computed result. The Python interpreter performs actual math — 100% accurate.
+        </div>
+        <p><strong>Rule of thumb:</strong> If your task involves math, counting, statistical analysis, or any aggregation over data — make sure AI is <em>writing and running code</em>, not "thinking about numbers."</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header mod3" onclick="toggleCard(this)">
+        <span class="icon">🔍</span> 3.4 Retrieval-Augmented Generation (RAG)
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <p>RAG is the dominant pattern for making LLMs work with your <strong>private company data</strong> without fine-tuning the model. The model stays unchanged; relevant context is injected at query time.</p>
+        <h3>RAG Pipeline (6 Steps)</h3>
+        <ol>
+          <li><strong>Ingestion:</strong> Load &amp; split documents into 500–2,000 token chunks</li>
+          <li><strong>Embedding:</strong> Each chunk → dense vector via embedding model</li>
+          <li><strong>Storage:</strong> Vectors stored in a vector database (Pinecone, Weaviate, pgvector)</li>
+          <li><strong>Query:</strong> User question → embedded into same vector space</li>
+          <li><strong>Retrieval:</strong> Find K most similar chunks (typically K=5 to 20)</li>
+          <li><strong>Generation:</strong> Retrieved chunks inserted into LLM prompt as context → grounded answer</li>
+        </ol>
+        <h3>RAG vs Fine-Tuning</h3>
+        <div class="callout callout-info">For most enterprise use cases, RAG is preferred: it's cheaper, faster to update, more controllable, and keeps sensitive data out of model weights.</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header mod3" onclick="toggleCard(this)">
+        <span class="icon">🤖</span> 3.5 AI Agents &amp; Tool Use
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <h3>Function Calling</h3>
+        <p>Modern LLMs can decide which external tools to call and with what parameters. "Check if we have inventory for SKU-4521" → the model generates a structured API call, receives results, and synthesizes a natural language response.</p>
+        <h3>Multi-Step Agents</h3>
+        <p>Agent given: "Research competitor pricing and update our spreadsheet" might: (1) search the web, (2) extract prices, (3) compare against internal data, (4) format results, (5) update the spreadsheet — all autonomously.</p>
+        <h3>Model Context Protocol (MCP)</h3>
+        <p>An emerging standard that standardizes how LLMs connect to external data sources — one protocol instead of custom connectors for each tool.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════ MODULE 4 ════════════════════════════════════════ -->
+<div id="page-m4" class="page">
+  <div class="content">
+
+    <div class="card">
+      <div class="card-header mod4" onclick="toggleCard(this)">
+        <span class="icon">📋</span> 4.1 The RTCF Framework
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <p>Every effective prompt contains four components:</p>
+        <pre>ROLE:    You are a [specific role] with [relevant experience].
+TASK:    [Specific, measurable deliverable].
+CONTEXT: [Audience, constraints, background].
+FORMAT:  [Exact output structure, length, sections].</pre>
+
+        <h3>Role — channel expertise</h3>
+        <p><span class="badge badge-red">Weak</span> "Help me analyze this data."</p>
+        <p><span class="badge badge-green">Strong</span> "You are a senior financial analyst with 15 years in Thai consumer finance, reporting to the CFO of a company with 1,000+ branches, specializing in vehicle loan portfolio analysis."</p>
+
+        <h3>Task — specific deliverable</h3>
+        <p><span class="badge badge-red">Weak</span> "Tell me about our Q3 performance."</p>
+        <p><span class="badge badge-green">Strong</span> "Analyze the attached Q3 P&amp;L and identify the top 3 cost centers that exceeded budget by more than 10%. For each, calculate absolute and percentage variance, probable root cause, and recommended corrective action."</p>
+
+        <h3>Context — constrain the solution space</h3>
+        <p>Without context, the model fills gaps with generic assumptions. Provide: audience, constraints, background, relevant numbers, and what "we" refers to.</p>
+
+        <h3>Format — eliminate reformatting time</h3>
+        <p><span class="badge badge-green">Strong</span> "Output as: (1) 3-sentence executive summary. (2) Table: Cost Center | Budget | Actual | Variance % | Root Cause. (3) Bullet-pointed action list with owner and deadline per item."</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header mod4" onclick="toggleCard(this)">
+        <span class="icon">🔗</span> 4.2 Advanced Prompting Techniques
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <h3>Chain-of-Thought (CoT) Prompting</h3>
+        <p>Add "Think step-by-step" or "Show your reasoning before concluding." CoT improves accuracy on math and logic tasks by <strong>20–40%</strong> for non-reasoning models.</p>
+        <div class="callout callout-info">Example: "Determine whether this contract clause creates liability. Think step-by-step: (1) Identify specific obligations, (2) map to relevant Thai Commercial Code sections, (3) assess enforceability, (4) conclude."</div>
+
+        <h3>Scratchpad &amp; XML Tags</h3>
+        <pre>"Write your analysis in &lt;scratchpad&gt; tags.
+Then give your final recommendation in &lt;answer&gt; tags.
+The scratchpad is for internal reasoning only."</pre>
+
+        <h3>Few-Shot Examples</h3>
+        <p>Provide 2–3 input/output examples before your actual request. The model pattern-matches against your examples for consistent formatting and style.</p>
+
+        <h3>Negative Prompting</h3>
+        <p>Telling the model what NOT to do is often more effective than telling it what to do:</p>
+        <p><code>DO NOT: use bullet points; include caveats or disclaimers; start with "Certainly!" or "Great question!"; exceed 300 words; use jargon without definition.</code></p>
+
+        <h3>Structured JSON Output</h3>
+        <p>When AI output feeds into another system, demand JSON — don't parse free text. Most modern APIs support JSON schema enforcement (OpenAI: <code>response_format</code>, Claude: tool use with <code>input_schema</code>, Gemini: <code>response_mime_type</code>).</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header mod4" onclick="toggleCard(this)">
+        <span class="icon">💬</span> 4.4 Iterative Prompting
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <p>The biggest mistake: treating AI like a search engine (one query in, done). Expert users treat it as a conversation.</p>
+        <div class="callout callout-success">
+          <strong>Example multi-turn sequence</strong><br>
+          Turn 1: "Here is our Q3 data. Identify the 3 weakest-performing channels."<br><br>
+          Turn 2: "For those 3 channels, suggest 2 tactical changes each. Budget: 5M THB."<br><br>
+          Turn 3: "Expand option B for social media. Add timeline and KPIs. Format as executive brief."<br><br>
+          Turn 4: "Too long. Cut to 1 page. Make KPIs SMART. Add a risk column."
+        </div>
+        <p>By turn 4, you have a polished, specific deliverable impossible to get from a single prompt.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header mod4" onclick="toggleCard(this)">
+        <span class="icon">🏗️</span> 4.5 Context Engineering
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <h3>Context Priority Hierarchy</h3>
+        <ol>
+          <li><strong>System prompt (highest):</strong> Defines persona, behavioral rules, output standards — processed most attentively</li>
+          <li><strong>Uploaded documents (high):</strong> Invaluable for grounding responses in specific facts</li>
+          <li><strong>Conversation history (medium):</strong> Degrades for messages far back in long conversations</li>
+          <li><strong>Current user message (variable):</strong> Short, focused messages get higher per-token attention</li>
+          <li><strong>Training data (lowest):</strong> The fallback — exactly when generic patterns are most likely</li>
+        </ol>
+        <h3>Managing Long Conversations</h3>
+        <ul>
+          <li><strong>Periodic summarization:</strong> Every 8–10 messages, ask the AI to summarize key decisions and open questions</li>
+          <li><strong>Re-inject constraints:</strong> "Reminder: all output in formal Thai. Tables must use the header format from message 1."</li>
+          <li><strong>Fresh conversations for fresh tasks:</strong> Switching topics entirely? Start a new conversation.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header mod4" onclick="toggleCard(this)">
+        <span class="icon">🚫</span> 4.6 Anti-Patterns: What NOT to Do
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <ul>
+          <li><strong>The Wall of Text:</strong> Pasting a 20-page doc and adding "summarize this" at the end. Instruction is in the lowest-attention position.</li>
+          <li><strong>The Assumption of Knowledge:</strong> "What should we do about the Smith account?" — The model has no idea. Provide all relevant context.</li>
+          <li><strong>The Moving Target:</strong> Changing requirements each prompt without re-stating the full context.</li>
+          <li><strong>The Premature Delegation:</strong> "Should we approve this loan?" — The model cannot access your credit scoring system.</li>
+          <li><strong>The Format Neglect:</strong> Not specifying output format = 30 minutes reformatting. Specifying format = 30 seconds.</li>
+          <li><strong>The Complexity Bomb:</strong> 15 sub-tasks in one prompt. Break into sequential, focused prompts.</li>
+        </ul>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════ MODULE 5 ════════════════════════════════════════ -->
+<div id="page-m5" class="page">
+  <div class="content">
+
+    <div class="card">
+      <div class="card-header mod5" onclick="toggleCard(this)">
+        <span class="icon">📧</span> 5.1 The Email Transformer
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <p>Transform rough notes, emotional drafts, or bullet points into polished professional communications.</p>
+        <h3>Template</h3>
+        <pre>Role: Senior program manager writing to cross-functional stakeholders.
+
+Task: Transform these rough notes into a professional
+[escalation email / status update / client response / team announcement].
+
 Constraints:
-- Tone: [constructive / formal / casual]
-- Structure: Situation > Impact > Solution > Specific Ask
-- Length: under 200 words
-- Audience: [team / VP / client / all-staff]
-My rough notes: [paste here]</code></pre>
+- Tone: [constructive and solution-oriented / warm but direct /
+         formal and precise / casual and encouraging]
+- Include: impact statement, root cause, proposed fix, specific ask
+- Length: under [200] words
+- Audience: [team leads / VP / client / all-staff]
+- End with a specific [calendar invite request / deadline / action item]
 
-    <h3>Contract Deviation Analysis</h3>
-    <pre><code>Compare this vendor contract against our standard terms (attached).
-Output table: Clause | Our Standard | Vendor Version | Risk Level | Action
-Focus: liability caps, indemnification, IP, termination, SLA, data handling.</code></pre>
-
-    <h3>Meeting Intelligence Pipeline</h3>
-    <pre><code>Extract every commitment, decision, and action item from this transcript.
-Per item: Owner | Task | Deadline | Dependencies | Status
-Flag unresolved disagreements. Output as JSON.</code></pre>
-
-    <h3>Data Processing</h3>
-    <div class="callout danger">
-      <span class="icon">🚫</span>
-      <div><strong>Always use Code Execution mode for data tasks.</strong> Never ask the chat interface to "think about" numbers.</div>
+My rough notes:
+[paste your bullet points here]</pre>
+        <div class="callout callout-info"><strong>Recommended model:</strong> Any non-reasoning model (GPT-5.4, Claude Sonnet 4.6, Gemini 3.1 Pro). Temperature: 0.4.</div>
+        <div class="callout callout-warn"><strong>Verification:</strong> Read aloud. Check no information was added beyond your notes. Verify tone. Ensure no confidential information was inadvertently included.</div>
+      </div>
     </div>
-    <pre><code>Upload: [CSV file]
-Write a Python/pandas script to:
-1. Standardize address fields
-2. Normalize dates to YYYY-MM-DD
+
+    <div class="card">
+      <div class="card-header mod5" onclick="toggleCard(this)">
+        <span class="icon">📄</span> 5.2 Document Analysis at Scale
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <h3>Contract Deviation Analysis</h3>
+        <pre>Compare this vendor contract against our standard terms (attached).
+
+Output a table with columns:
+- Clause number
+- Our standard term (summarized)
+- Vendor's version (summarized)
+- Risk level: High / Medium / Low
+- Recommended action: Accept / Negotiate / Reject
+
+Focus on: liability caps, indemnification, IP ownership,
+termination rights, SLA penalties, data handling clauses.</pre>
+        <div class="callout callout-info"><strong>Recommended:</strong> Claude Sonnet 4.6 (1M context for long contracts) or a reasoning model for complex legal analysis.</div>
+
+        <h3>Meeting Intelligence Pipeline</h3>
+        <pre>Extract every commitment, decision, and action item from this transcript.
+
+For each item:
+- Owner: who committed
+- Task: specific deliverable
+- Deadline: explicit or inferred
+- Dependencies: what must happen first
+- Status: committed / tentative / needs clarification
+
+Flag any unresolved disagreements or open questions.
+Output as JSON for integration with project management system.</pre>
+
+        <h3>Multi-Document Synthesis</h3>
+        <pre>I am uploading 5 quarterly reports (Q1-Q4 2024 and Q1 2025).
+Analyze across all five and identify:
+1. Trends: patterns persisting across 3+ quarters
+2. Anomalies: single-quarter deviations &gt;15% from trend
+3. Underperformance: areas consistently below target
+4. Emerging risks: new issues in recent quarters
+
+Output: narrative summary (500 words) + data table + risk matrix.</pre>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header mod5" onclick="toggleCard(this)">
+        <span class="icon">📊</span> 5.3 Data Processing Workflows
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="callout callout-danger">
+          <strong>CRITICAL:</strong> Always use Code Execution mode for data processing tasks. Never ask the chat interface to process, clean, or analyze data by "thinking about it."
+        </div>
+        <h3>Data Cleaning &amp; Standardization</h3>
+        <pre>Upload: [your CSV file]
+Task: Write a Python script using pandas to:
+1. Standardize all address fields (proper case, abbreviations)
+2. Normalize date formats to YYYY-MM-DD
 3. Remove exact duplicates on [key column]
-4. Flag fuzzy duplicates (>85% similarity)
-5. Validate email and phone formats
-6. Export clean CSV + change summary</code></pre>
-  </section>
-
-  <!-- ── MODULE 6 ── -->
-  <section id="page-m6" class="page">
-    <div class="page-header">
-      <span class="module-badge m6">Module 6</span>
-      <h2>Data Security, Privacy &amp; Ethics</h2>
-      <p class="subtitle">Protecting company data, PDPA compliance, and accountability.</p>
-    </div>
-
-    <h3>Enterprise vs. Consumer AI</h3>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Feature</th><th>Consumer (Free/Plus)</th><th>Enterprise / API</th></tr></thead>
-        <tbody>
-          <tr><td>Data used for training?</td><td style="color:#dc2626;font-weight:600">Yes (default)</td><td style="color:#16a34a;font-weight:600">No — contractually guaranteed</td></tr>
-          <tr><td>Data retention</td><td>30 days to indefinite</td><td>Zero retention option</td></tr>
-          <tr><td>PDPA/GDPR compliant</td><td>Unclear</td><td>DPA signed; data residency options</td></tr>
-          <tr><td>Audit trail</td><td>No</td><td>Full logging, SSO</td></tr>
-        </tbody>
-      </table>
-    </div>
-
-    <div class="callout danger">
-      <span class="icon">🚫</span>
-      <div><strong>ZERO TOLERANCE:</strong> Using a personal ChatGPT/Claude/Gemini account for company work is strictly forbidden. Your confidential data could be used to train the next model and surface in competitor queries.</div>
-    </div>
-
-    <h3>Data Classification Framework</h3>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Level</th><th>Definition</th><th>AI Policy</th></tr></thead>
-        <tbody>
-          <tr>
-            <td><strong style="color:#16a34a">PUBLIC</strong></td>
-            <td>Press releases, job postings, public filings</td>
-            <td>Safe with any tool</td>
-          </tr>
-          <tr>
-            <td><strong style="color:#2563eb">INTERNAL</strong></td>
-            <td>Meeting notes, process docs, org charts</td>
-            <td>Enterprise tools only</td>
-          </tr>
-          <tr>
-            <td><strong style="color:#d97706">CONFIDENTIAL</strong></td>
-            <td>Financials, customer lists, salary data, contracts</td>
-            <td>Explicit IT/DPO approval required</td>
-          </tr>
-          <tr>
-            <td><strong style="color:#dc2626">RESTRICTED</strong></td>
-            <td>Trade secrets, credentials, health records, board minutes, PII</td>
-            <td style="color:#dc2626;font-weight:600">NEVER share with any AI system</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <h3>The Retraining Risk</h3>
-    <p>Pasting confidential data into a consumer AI → data enters training pipeline → future model may reproduce or reveal that information to anyone who asks a related question.</p>
-
-    <h4>Documented Incidents</h4>
-    <ul>
-      <li><strong>Samsung (2023):</strong> Engineers pasted proprietary source code into personal ChatGPT accounts.</li>
-      <li><strong>Mata v. Avianca (2023):</strong> Lawyer submitted AI-fabricated legal citations; fined by court.</li>
-      <li><strong>Italy (2023):</strong> ChatGPT temporarily banned by data protection authority over GDPR concerns.</li>
-    </ul>
-
-    <h3>Thailand PDPA Implications</h3>
-    <ul>
-      <li><strong>Section 24:</strong> Personal data requires a valid legal basis to process.</li>
-      <li><strong>Section 27:</strong> Consent must be explicit and specific — prior consent for loan processing does NOT cover AI tool processing.</li>
-      <li><strong>Sections 77–90:</strong> Fines up to <strong>5 million baht per violation</strong>; criminal liability possible.</li>
-    </ul>
-
-    <div class="callout warning">
-      <span class="icon">⚖️</span>
-      <div><strong>Accountability Standard:</strong> You are legally and professionally responsible for every output you send or publish. <em>"The AI wrote it"</em> is not a defense.</div>
-    </div>
-
-    <h3>Pre-Send Checklist</h3>
-    <ul class="checklist">
-      <li>Verified every fact, figure, citation independently</li>
-      <li>Reviewed for gendered/biased language</li>
-      <li>No confidential or restricted data revealed</li>
-      <li>Matches company tone and brand standards</li>
-      <li>No legal liability from claims that turn out to be wrong</li>
-    </ul>
-  </section>
-
-  <!-- ── QUICK REFERENCE ── -->
-  <section id="page-ref" class="page">
-    <div class="page-header">
-      <span class="module-badge ref">Quick Reference</span>
-      <h2>Quick Reference Guide</h2>
-      <p class="subtitle">Model selection and data classification at a glance.</p>
-    </div>
-
-    <h3>Model Selection Guide</h3>
-    <div class="table-wrap">
-      <table>
-        <thead><tr><th>Need</th><th>Use</th><th>Why</th></tr></thead>
-        <tbody>
-          <tr>
-            <td>Quick drafting, email, brainstorming</td>
-            <td><strong>GPT-5.4 / Claude Sonnet 4.6 / Gemini 3.1 Pro</strong></td>
-            <td>Fast, cheap, great language tasks</td>
-          </tr>
-          <tr>
-            <td>Complex analysis, logic, math reasoning</td>
-            <td><strong>o3 / o4-mini / DeepSeek R1</strong></td>
-            <td>Deliberate thinking with self-checking</td>
-          </tr>
-          <tr>
-            <td>Data crunching, charts, statistics</td>
-            <td><strong>Code Execution (any platform)</strong></td>
-            <td>Writes &amp; runs actual code; 100% accurate math</td>
-          </tr>
-          <tr>
-            <td>100+ page documents</td>
-            <td><strong>Gemini 3.1 Pro (1M context) or chunked RAG</strong></td>
-            <td>Largest context window</td>
-          </tr>
-          <tr>
-            <td>Company-specific Q&amp;A</td>
-            <td><strong>RAG pipeline or Custom Agent/GPT</strong></td>
-            <td>Grounded in your actual documents</td>
-          </tr>
-          <tr>
-            <td>High-volume, cost-sensitive</td>
-            <td><strong>GPT-5 mini / Claude Haiku / Gemini Flash 2.0</strong></td>
-            <td>Lowest cost with acceptable quality</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-    <h3>Data Classification Quick Test</h3>
-    <div class="decision-tree">
-      <div class="decision-step">
-        <span class="q" style="background:#16a34a">1</span>
-        <div>"Would this matter if it appeared on the front page of a newspaper?" <span class="arrow">→</span> If <strong>no</strong>: probably <strong style="color:#16a34a">Public</strong>.</div>
-      </div>
-      <div class="decision-step">
-        <span class="q" style="background:#2563eb">2</span>
-        <div>"Does it contain names, numbers, or specifics about employees, customers, or strategy?" <span class="arrow">→</span> If <strong>no</strong>: probably <strong style="color:#2563eb">Internal</strong>.</div>
-      </div>
-      <div class="decision-step">
-        <span class="q" style="background:#dc2626">3</span>
-        <div>"Could disclosure cause financial loss, legal action, or regulatory penalty?" <span class="arrow">→</span> If <strong>yes</strong>: <strong style="color:#dc2626">Confidential or Restricted</strong>. Consult IT/DPO before any AI use.</div>
+4. Flag potential fuzzy duplicates (&gt;85% name similarity)
+5. Validate email format and phone number format
+6. Export clean data as CSV with a summary of changes made</pre>
+        <h3>Exploratory Data Analysis</h3>
+        <pre>Upload: [your data file]
+Write a Python EDA script that produces:
+1. Descriptive statistics for all numerical columns
+2. Missing value counts and percentages
+3. Distribution histograms for key metrics
+4. Correlation matrix with heatmap
+5. Time series plot if date column exists
+6. Top 10 outliers by z-score
+7. Written summary of key findings</pre>
       </div>
     </div>
 
-    <h3>The Five Non-Negotiable Rules</h3>
-    <ul class="rules-list">
-      <li><span class="rule-num">1</span><div><strong>Never trust AI output without independent verification.</strong> Hallucinations are inherent, not bugs.</div></li>
-      <li><span class="rule-num">2</span><div><strong>Never use personal AI accounts for company data.</strong> Consumer AI may train on your inputs.</div></li>
-      <li><span class="rule-num">3</span><div><strong>Classify data before every AI interaction.</strong> Public → anywhere. Internal → enterprise only. Confidential/Restricted → strict protocols.</div></li>
-      <li><span class="rule-num">4</span><div><strong>Match the tool to the task.</strong> Chat for drafting. Code Execution for math. Reasoning models for logic. Specialized tools for domain tasks.</div></li>
-      <li><span class="rule-num">5</span><div><strong>You own the output.</strong> You are the final quality gate. AI is the tool; you are the intelligence.</div></li>
-    </ul>
+    <div class="card">
+      <div class="card-header mod5" onclick="toggleCard(this)">
+        <span class="icon">💡</span> 5.4 The Brainstorming Partner
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <p>AI excels at overcoming blank-page syndrome. Use it to generate starting points, not final products.</p>
+        <pre>I need to [create a quarterly business review presentation /
+write a project proposal / plan a team offsite / design a new process].
 
-    <div class="callout info" style="margin-top:40px">
-      <span class="icon">📄</span>
-      <div>This document covers all 6 modules and appendices of the AI Literacy Manual — Ngernturbo Public Company Limited, March 2026. <strong>Internal Use Only.</strong></div>
+Give me 5 possible structural approaches, each with:
+- A 1-sentence description
+- 3-4 key sections or components
+- The main advantage of this structure
+- Who this approach works best for
+
+After I pick one, help me flesh out the details.</pre>
+      </div>
     </div>
-  </section>
 
-</main>
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════ MODULE 6 ════════════════════════════════════════ -->
+<div id="page-m6" class="page">
+  <div class="content">
+
+    <div class="callout callout-danger" style="margin-bottom:14px">
+      <strong>This module protects your career and your company.</strong> Every other module teaches you how to use AI effectively. This module teaches you how to use AI without creating legal liability, data breaches, or regulatory violations.
+    </div>
+
+    <div class="card">
+      <div class="card-header mod6" onclick="toggleCard(this)">
+        <span class="icon">🏢</span> 6.1 Enterprise vs Consumer AI
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+          <table>
+            <tr><th>Feature</th><th>Consumer (Free/Plus)</th><th>Enterprise</th></tr>
+            <tr><td>Training on your data</td><td>Yes (by default)</td><td>No</td></tr>
+            <tr><td>Data retention</td><td>30+ days</td><td>Zero or configurable</td></tr>
+            <tr><td>Privacy agreement</td><td>Standard ToS</td><td>Custom DPA</td></tr>
+            <tr><td>Audit logs</td><td>None</td><td>Full audit trail</td></tr>
+            <tr><td>SSO / access control</td><td>No</td><td>Yes</td></tr>
+          </table>
+        </div>
+        <div class="callout callout-danger">
+          <strong>ZERO TOLERANCE:</strong> Using a personal ChatGPT, Claude, or Gemini account for company work is strictly forbidden. Consumer AI providers may use your inputs to train their next model. This is not a policy preference — it is a data security and legal compliance requirement.
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header mod6" onclick="toggleCard(this)">
+        <span class="icon">☣️</span> 6.2 The Retraining Risk
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <p>When you paste company data into a personal AI account, here is the technical path that data follows:</p>
+        <ol>
+          <li>You paste confidential data (salary info, customer lists, financial projections) into a personal ChatGPT/Claude Free account.</li>
+          <li>The provider's pipeline ingests your conversation for model improvement.</li>
+          <li>Your data becomes part of the training dataset for the next model version.</li>
+          <li>The new model version is deployed to millions of users worldwide.</li>
+          <li>A competitor or random user asks a related question — the model may surface patterns learned from your data.</li>
+        </ol>
+        <h3>Documented Real Incidents</h3>
+        <ul>
+          <li><strong>Samsung (2023):</strong> Engineers pasted proprietary semiconductor source code into ChatGPT. Samsung banned ChatGPT company-wide — but the data had already entered the pipeline.</li>
+          <li><strong>Italy (2023):</strong> Italian Data Protection Authority temporarily banned ChatGPT over GDPR data processing concerns.</li>
+          <li><strong>Financial Sector (2023–2024):</strong> JPMorgan Chase, Goldman Sachs, Deutsche Bank banned consumer ChatGPT for employees.</li>
+          <li><strong>Thailand PDPA:</strong> Section 27 requires explicit consent for personal data processing. Submitting customer PII to consumer AI without consent is a PDPA violation.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header mod6" onclick="toggleCard(this)">
+        <span class="icon">🏷️</span> 6.3 Data Classification Framework
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <p><strong>Before pasting anything into any AI tool, classify it:</strong></p>
+        <div class="tbl-wrap">
+          <table>
+            <tr><th>Level</th><th>Definition</th><th>AI Rule</th></tr>
+            <tr><td><span class="badge badge-green">Public</span></td><td>Already public or intended for public release</td><td>Any AI tool</td></tr>
+            <tr><td><span class="badge badge-blue">Internal</span></td><td>Internal communications, non-sensitive processes</td><td>Enterprise AI only</td></tr>
+            <tr><td><span class="badge badge-yellow">Confidential</span></td><td>Salaries, business strategy, financial projections</td><td>Enterprise AI + IT approval</td></tr>
+            <tr><td><span class="badge badge-red">Restricted</span></td><td>Customer PII, API keys, board minutes, health data</td><td>No AI use without DPO approval</td></tr>
+          </table>
+        </div>
+        <h3>Quick 3-Question Test</h3>
+        <ol>
+          <li>"Would it matter if this appeared on the front page of a newspaper?" — No → probably Public</li>
+          <li>"Does this contain names, numbers, or specifics about employees, customers, or strategy?" — No → probably Internal</li>
+          <li>"Could disclosure cause financial loss, legal action, or regulatory penalty?" — Yes → Confidential or Restricted. Consult IT/DPO before any AI use.</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header mod6" onclick="toggleCard(this)">
+        <span class="icon">⚖️</span> 6.4 Bias &amp; Fair Use
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <p>AI-generated content requires the same anti-discrimination review as human-generated content — often more, because AI systems have documented tendencies to produce biased output at scale.</p>
+        <ul>
+          <li><strong>Job descriptions:</strong> Frequently use gendered language, impose unnecessary requirements that exclude certain demographics</li>
+          <li><strong>Performance reviews:</strong> AI uses "assertive" and "visionary" for men; "collaborative" and "supportive" for women — even with equivalent performance data</li>
+          <li><strong>Customer communications:</strong> May reflect training data biases — test templates across diverse demographics before deployment</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header mod6" onclick="toggleCard(this)">
+        <span class="icon">✅</span> 6.5 Accountability Standard
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="callout callout-danger">
+          <strong>You are legally and professionally responsible for every output you send, forward, or publish. "The AI wrote it" is not a defense.</strong>
+        </div>
+        <p>Before sending any AI-generated content, check:</p>
+        <ul>
+          <li><strong>Facts &amp; Figures:</strong> Have I independently verified every statistic, date, name, and citation?</li>
+          <li><strong>Bias Audit:</strong> Have I reviewed for gendered language, cultural stereotypes, or inadvertent discrimination?</li>
+          <li><strong>Data Exposure:</strong> Does this output contain or imply any confidential or restricted information?</li>
+          <li><strong>Tone &amp; Brand:</strong> Does this match our communication standards? Would I put my name on this to send to our CEO?</li>
+          <li><strong>Legal Liability:</strong> Could any claim create legal exposure if it turns out to be wrong?</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header mod6" onclick="toggleCard(this)">
+        <span class="icon">📜</span> 6.6 Regulatory Landscape: PDPA &amp; GDPR
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <h3>Thailand PDPA &amp; AI</h3>
+        <ul>
+          <li><strong>Section 24:</strong> Personal data can only be processed with a valid legal basis. Submitting customer data to AI requires consent or legitimate interest.</li>
+          <li><strong>Section 27:</strong> Consent must be freely given, specific, informed, and unambiguous. Customers who consented to "banking services" did not consent to AI processing.</li>
+          <li><strong>Section 37:</strong> Organizations of significant scale must appoint a DPO. AI tool procurement should be reviewed by the DPO.</li>
+          <li><strong>Sections 77–90:</strong> Administrative fines up to 5 million baht per violation. Criminal penalties including imprisonment for certain violations.</li>
+        </ul>
+        <h3>GDPR Considerations (for EU/EEA data)</h3>
+        <ul>
+          <li><strong>Article 28:</strong> Any AI provider processing personal data on your behalf is a data processor — Data Processing Agreement (DPA) required.</li>
+          <li><strong>Article 22:</strong> Individuals have the right not to be subject to fully automated decisions with legal effects.</li>
+          <li><strong>Chapter V:</strong> Cross-border transfer to AI providers outside the EU requires Standard Contractual Clauses or adequacy decisions.</li>
+        </ul>
+        <h3>Emerging AI Regulations</h3>
+        <ul>
+          <li><strong>EU AI Act (2024):</strong> High-risk AI systems (employment, credit scoring) face mandatory testing, documentation, and human oversight requirements.</li>
+          <li><strong>Thailand AI Governance Framework:</strong> Under development — monitor ETDA publications.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header mod6" onclick="toggleCard(this)">
+        <span class="icon">🗺️</span> 6.8 Implementation Roadmap
+        <span class="chevron">▼</span>
+      </div>
+      <div class="card-body">
+        <div class="tbl-wrap">
+          <table>
+            <tr><th>Phase</th><th>Timeframe</th><th>Key Actions</th></tr>
+            <tr><td>1: Foundation</td><td>Month 1–2</td><td>Audit current AI usage, classify data being processed, identify risks</td></tr>
+            <tr><td>2: Policy</td><td>Month 2–3</td><td>Draft Acceptable Use Policy, procure enterprise AI accounts, establish data classification</td></tr>
+            <tr><td>3: Training</td><td>Month 3–4</td><td>Roll out AI literacy training (this manual), designate AI Champions per department</td></tr>
+            <tr><td>4: Optimization</td><td>Month 4–6</td><td>Monitor adoption, identify high-value use cases, evaluate ROI</td></tr>
+            <tr><td>5: Governance</td><td>Ongoing</td><td>Quarterly policy reviews, annual training refreshes, regulatory monitoring</td></tr>
+          </table>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════ BOTTOM NAV ════════════════════════════════════════ -->
+<nav class="bottom-nav">
+  <button class="nav-item active" id="nav-home" onclick="goPage('page-home')">
+    <span class="ni">🏠</span>
+    Home
+    <span class="nav-dot"></span>
+  </button>
+  <button class="nav-item" id="nav-m1" onclick="goPage('page-m1')">
+    <span class="ni">🧠</span>
+    Module 1
+  </button>
+  <button class="nav-item" id="nav-m2" onclick="goPage('page-m2')">
+    <span class="ni">⚠️</span>
+    Module 2
+  </button>
+  <button class="nav-item" id="nav-m3" onclick="goPage('page-m3')">
+    <span class="ni">🗂️</span>
+    Module 3
+  </button>
+  <button class="nav-item" id="nav-m4" onclick="goPage('page-m4')">
+    <span class="ni">✍️</span>
+    Module 4
+  </button>
+  <button class="nav-item" id="nav-m5" onclick="goPage('page-m5')">
+    <span class="ni">⚙️</span>
+    Module 5
+  </button>
+  <button class="nav-item" id="nav-m6" onclick="goPage('page-m6')">
+    <span class="ni">🔒</span>
+    Module 6
+  </button>
+</nav>
 
 <script>
-  function showPage(id, link) {
+  const pageMap = {
+    'page-home': 'nav-home',
+    'page-m1':   'nav-m1',
+    'page-m2':   'nav-m2',
+    'page-m3':   'nav-m3',
+    'page-m4':   'nav-m4',
+    'page-m5':   'nav-m5',
+    'page-m6':   'nav-m6',
+  };
+
+  function goPage(id) {
+    // Hide all pages
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
-    document.getElementById('page-' + id).classList.add('active');
-    if (link) link.classList.add('active');
-    window.scrollTo(0, 0);
-    closeSidebar();
-    return false;
-  }
-
-  function showPageByName(id) {
-    const link = [...document.querySelectorAll('nav a')].find(a =>
-      a.getAttribute('onclick') && a.getAttribute('onclick').includes("'" + id + "'")
-    );
-    showPage(id, link);
-    return false;
-  }
-
-  function toggleSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    const overlay = document.getElementById('sidebar-overlay');
-    sidebar.classList.toggle('open');
-    overlay.classList.toggle('visible');
-  }
-
-  function closeSidebar() {
-    document.getElementById('sidebar').classList.remove('open');
-    document.getElementById('sidebar-overlay').classList.remove('visible');
-  }
-
-  document.querySelectorAll('.module-card').forEach(card => {
-    card.addEventListener('click', e => {
-      e.preventDefault();
+    // Remove active from all nav items
+    document.querySelectorAll('.nav-item').forEach(n => {
+      n.classList.remove('active');
+      const dot = n.querySelector('.nav-dot');
+      if (dot) dot.remove();
     });
-  });
+    // Show target page
+    document.getElementById(id).classList.add('active');
+    // Activate nav item
+    const navId = pageMap[id];
+    if (navId) {
+      const navEl = document.getElementById(navId);
+      navEl.classList.add('active');
+      if (!navEl.querySelector('.nav-dot')) {
+        const dot = document.createElement('span');
+        dot.className = 'nav-dot';
+        navEl.appendChild(dot);
+      }
+    }
+    window.scrollTo(0, 0);
+  }
+
+  function toggleCard(header) {
+    const body = header.nextElementSibling;
+    const isOpen = body.classList.contains('open');
+    body.classList.toggle('open', !isOpen);
+    header.classList.toggle('open', !isOpen);
+  }
 </script>
 </body>
 </html>
